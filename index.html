@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O'zbek Kino Durdonalari — Oltin Fond</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --card-bg: #121212;
+            --accent: #e50914; /* Kino uslubidagi qizil */
+            --gold: #d4af37;
+            --text: #ffffff;
+            --muted: #a0a0a0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Space+Grotesk', sans-serif;
+            line-height: 1.6;
+        }
+
+        header {
+            height: 60vh;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), var(--bg)), 
+                        url('https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=2059&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: -50px auto 50px;
+            padding: 0 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .movie-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #222;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(229, 9, 20, 0.2);
+            border-color: var(--accent);
+        }
+
+        .poster-placeholder {
+            height: 400px;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .year-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent);
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .info {
+            padding: 20px;
+        }
+
+        .info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: var(--gold);
+        }
+
+        .info p {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--text);
+            border-top: 1px solid #222;
+            padding-top: 15px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--muted);
+            border-top: 1px solid #111;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <p class="subtitle">O'zbekiston Kinematografiyasi</p>
+    <h1>Oltin Fond</h1>
+</header>
+
+<div class="container">
+    <div class="grid">
+        <div class="movie-card">
+            <div class="poster-placeholder">
+                <span class="year-tag">1977</span>
+                <img src="https://via.placeholder.com/300x400/1a1a1a/e50914?text=Shum+Bola" alt="Shum Bola" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <div class="info">
+                <h3>Shum Bola</h3>
+                <p>G'afur G'ulom qissasi asosida suratga olingan, o'zbek kinosining eng yorqin namunasi. Sayoq yurgan bolaning sarguzashtlari.</p>
+                <div class="meta">
+                    <span>Rejissyor: Damir Salimov</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="movie-card">
+            <div class="poster-placeholder">
+                <span class="year-tag">1960</span>
+                <img src="https://via.placeholder.com/300x400/1a1a1a/e50914?text=Mahallada+Duv-Duv+Gap" alt="Mahallada Duv-Duv Gap" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <div class="info">
+                <h3>Mahallada Duv-Duv Gap</h3>
+                <p>Toshkentning eski mahallasidagi hayot, urf-odatlar va quvnoq voqealar haqidagi unutilmas komediya.</p>
+                <div class="meta">
+                    <span>Rejissyor: Yo'ldosh A'zamov</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="movie-card">
+            <div class="poster-placeholder">
+                <span class="year-tag">1969</span>
+                <img src="https://via.placeholder.com/300x400/1a1a1a/e50914?text=O'tkan+Kunlar" alt="O'tkan Kunlar" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <div class="info">
+                <h3>O'tkan Kunlar</h3>
+                <p>Abdulla Qodiriyning mashhur romani asosida yaratilgan klassik asar. Kumush va Otabekning fojiaviy muhabbati.</p>
+                <div class="meta">
+                    <span>Rejissyor: Yo'ldosh A'zamov</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 O'zbek Kino Arshivi. Barcha huquqlar himoyalangan.</p>
+</footer>
+
+</body>
+</html>
