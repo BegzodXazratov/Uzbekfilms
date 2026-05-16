@@ -1,385 +1,315 @@
-"use client";
-
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Play, ArrowRight, Instagram, Youtube, Send, ChevronDown, CheckCircle2, Video, TrendingUp, MonitorPlay, Target, LayoutTemplate } from "lucide-react";
-
-// Animation Variants
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
-};
-
-export default function AgencyLandingPage() {
-  return (
-    <div className="bg-[#050505] min-h-screen text-gray-200 font-sans selection:bg-white selection:text-black">
-      {/* 1. HERO SECTION */}
-      <section className="relative h-screen flex flex-col justify-center overflow-hidden px-6 md:px-12 lg:px-24">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#1a1a1a_0%,#050505_100%)] opacity-50"></div>
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay"></div>
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Creative Agency</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         
-        <motion.div 
-          className="relative z-10 max-w-5xl"
-          initial="hidden"
-          animate="visible"
-          variants={staggerContainer}
-        >
-          <motion.div variants={fadeUp} className="mb-6 inline-flex items-center gap-3 px-4 py-2 rounded-full border border-gray-800 bg-white/5 backdrop-blur-md">
-            <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-            <span className="text-sm font-medium tracking-wide uppercase text-gray-300">Premium Creative Agency</span>
-          </motion.div>
-          
-          <motion.h1 variants={fadeUp} className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white leading-[1.05] mb-6">
-            E'tiborni tortadigan <br className="hidden md:block"/> 
-            va brend imidjini <br className="hidden md:block"/> 
-            yaratadigan kontent.
-          </motion.h1>
-          
-          <motion.p variants={fadeUp} className="text-lg md:text-2xl text-gray-400 max-w-2xl mb-10 font-light leading-relaxed">
-            Biz shunchaki SMM emasmiz. Biz kreativlik va marketing strategiyasini birlashtirib, auditoriyangizni hayratda qoldiradigan premium kontent yaratamiz.
-          </motion.p>
-          
-          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4">
-            <a href="#contact" className="px-8 py-4 bg-white text-black font-semibold rounded-none hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 group">
-              Bog‘lanish <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
-            <a href="#portfolio" className="px-8 py-4 bg-transparent border border-gray-700 text-white font-semibold rounded-none hover:border-white transition-colors flex items-center justify-center">
-              Portfolio ko‘rish
-            </a>
-          </motion.div>
-        </motion.div>
-      </section>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+            color: #e5e7eb;
+            overflow-x: hidden;
+        }
+        
+        /* Silliq scroll */
+        html { scroll-behavior: smooth; }
+        
+        /* Gorizontal scrollbar ni yashirish */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-      {/* 2. TRUST / POSITIONING SECTION */}
-      <section className="py-24 px-6 md:px-12 lg:px-24 bg-[#0a0a0a]">
-        <motion.div 
-          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
-        >
-          <motion.div variants={fadeUp} className="p-8 border border-gray-800/50 bg-[#080808] hover:bg-[#0c0c0c] transition-colors">
-            <h3 className="text-2xl font-bold text-white mb-4">Strategik Yondashuv</h3>
-            <p className="text-gray-400">Bu shunchaki chiroyli kadrlar emas. Har bir video marketing maqsadlariga, auditoriya psixologiyasiga va e'tibor iqtisodiyotiga asoslanib yaratiladi.</p>
-          </motion.div>
-          <motion.div variants={fadeUp} className="p-8 border border-gray-800/50 bg-[#080808] hover:bg-[#0c0c0c] transition-colors">
-            <h3 className="text-2xl font-bold text-white mb-4">Cinematic Sifat</h3>
-            <p className="text-gray-400">Bizning jamoa yuqori darajadagi prodyuserlik va kino sanoati standartlarini brendingizga olib kiradi. Sifat – bu ishonch demakdir.</p>
-          </motion.div>
-          <motion.div variants={fadeUp} className="p-8 border border-gray-800/50 bg-[#080808] hover:bg-[#0c0c0c] transition-colors">
-            <h3 className="text-2xl font-bold text-white mb-4">E'tibor Markazida</h3>
-            <p className="text-gray-400">Zamonaviy dunyoda eng qimmat valyuta bu – e'tibor. Biz odamlar o'tkazib yubormaydigan, oxirigacha ko'radigan kontent quramiz.</p>
-          </motion.div>
-        </motion.div>
-      </section>
+        /* Kadrlar uchun animatsiya */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+    </style>
+</head>
+<body class="selection:bg-white selection:text-black">
 
-      {/* 3. PORTFOLIO SECTION */}
-      <section id="portfolio" className="py-32 overflow-hidden">
-        <div className="px-6 md:px-12 lg:px-24 mb-12 flex flex-col md:flex-row justify-between items-end gap-6">
-          <motion.h2 
-            initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-            className="text-4xl md:text-6xl font-bold tracking-tighter text-white"
-          >
-            Tanlangan <br/> Ishlarimiz.
-          </motion.h2>
-          <p className="text-gray-400 max-w-sm text-right">Biz yaratgan vizual hikoyalar va kreativ yechimlar bilan tanishing.</p>
-        </div>
-
-        {/* Horizontal Carousel */}
-        <div className="flex overflow-x-auto gap-6 px-6 md:px-12 lg:px-24 pb-12 snap-x snap-mandatory hide-scrollbar cursor-grab active:cursor-grabbing">
-          {[
-            { tag: "Commercial", title: "Brand Identity Film" },
-            { tag: "Reels", title: "Dynamic Product Showcase" },
-            { tag: "Fashion", title: "Autumn Collection '26" },
-            { tag: "Interview", title: "Founder's Story" },
-            { tag: "Food", title: "Cinematic Culinary" },
-            { tag: "Podcast", title: "High-End Setup" },
-            { tag: "Reels", title: "Attention Grabber" },
-            { tag: "Commercial", title: "Tech Launch Video" },
-          ].map((item, i) => (
-            <motion.div 
-              key={i} 
-              initial={{ opacity: 0, scale: 0.95 }} 
-              whileInView={{ opacity: 1, scale: 1 }} 
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="snap-center shrink-0 w-[85vw] md:w-[600px] aspect-video relative group bg-[#0a0a0a] border border-gray-800 flex items-center justify-center overflow-hidden"
-            >
-              {/* Vimeo Embed Placeholder */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
-              
-              <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center z-20 group-hover:scale-110 group-hover:bg-white transition-all duration-300">
-                <Play className="w-6 h-6 text-white group-hover:text-black ml-1" />
-              </div>
-
-              <div className="absolute bottom-6 left-6 z-20">
-                <span className="px-3 py-1 bg-white/10 backdrop-blur-md border border-white/10 text-white text-xs uppercase tracking-wider mb-3 inline-block">
-                  {item.tag}
-                </span>
-                <h4 className="text-2xl font-bold text-white group-hover:translate-x-2 transition-transform duration-300">{item.title}</h4>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* 4. SERVICES SECTION */}
-      <section className="py-24 px-6 md:px-12 lg:px-24 bg-[#080808]">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-white">Bizning xizmatlar.</h2>
-          <div className="w-full h-[1px] bg-gray-800 mt-8"></div>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-16 gap-x-12">
-          {[
-            { icon: Video, title: "Creative Reels Production", desc: "Algoritmlarga moslashgan, e'tiborni ushlab turuvchi qisqa metrajli, yuqori sifatli videolar." },
-            { icon: MonitorPlay, title: "YouTube Content", desc: "Kanal strategiyasidan tortib, syomka va montajgacha bo'lgan to'liq prodyuserlik." },
-            { icon: TrendingUp, title: "Content Strategy", desc: "Brendingiz uchun oylik va yillik kontent rejalar, pozitsiyalash va auditoriya tahlili." },
-            { icon: Target, title: "Target Advertising", desc: "Yaratilgan media mahsulotlarni aniq maqsadli auditoriyaga yetkazib berish va leads yig'ish." },
-            { icon: LayoutTemplate, title: "Landing Page Creation", desc: "Konversiyaga yo'naltirilgan, zamonaviy va premium veb-saytlar yaratish." }
-          ].map((srv, i) => (
-            <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="group">
-              <srv.icon className="w-10 h-10 text-gray-500 mb-6 group-hover:text-white transition-colors duration-300" strokeWidth={1.5} />
-              <h3 className="text-2xl font-bold text-white mb-3">{srv.title}</h3>
-              <p className="text-gray-400 leading-relaxed">{srv.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* 5. PRICING SECTION */}
-      <section className="py-32 px-6 md:px-12 lg:px-24">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-20">
-          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-white mb-4">Sarmoya.</h2>
-          <p className="text-gray-400">Sizning biznesingizga mos keladigan premium yechimlar.</p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-          {/* Card 1 */}
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="p-8 border border-gray-800 bg-[#0a0a0a] flex flex-col">
-            <h3 className="text-xl font-bold text-white mb-2">Test Package</h3>
-            <p className="text-sm text-gray-500 mb-8 pb-8 border-b border-gray-800">Hamkorlikni boshlash uchun mukammal tanlov.</p>
-            <ul className="space-y-4 mb-10 flex-grow">
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400 shrink-0" /><span className="text-gray-300 text-sm">3 ta qisqa video (Reels)</span></li>
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400 shrink-0" /><span className="text-gray-300 text-sm">Ssenariy yozish</span></li>
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400 shrink-0" /><span className="text-gray-300 text-sm">Kreativ direksiya</span></li>
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400 shrink-0" /><span className="text-gray-300 text-sm">Minimal prodyuserlik</span></li>
-            </ul>
-            <button className="w-full py-4 border border-gray-700 text-white hover:bg-white hover:text-black transition-colors">Tanlash</button>
-          </motion.div>
-
-          {/* Card 2 */}
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="p-8 border border-gray-800 bg-[#0a0a0a] flex flex-col">
-            <h3 className="text-xl font-bold text-white mb-2">Standard</h3>
-            <p className="text-sm text-gray-500 mb-8 pb-8 border-b border-gray-800">Faol brendlar uchun optimal yechim.</p>
-            <ul className="space-y-4 mb-10 flex-grow">
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400 shrink-0" /><span className="text-gray-300 text-sm">8 ta Reels / TikTok</span></li>
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400 shrink-0" /><span className="text-gray-300 text-sm">Kontent strategiya (1 oylik)</span></li>
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400 shrink-0" /><span className="text-gray-300 text-sm">Kasting va lokalizatsiya</span></li>
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400 shrink-0" /><span className="text-gray-300 text-sm">Sifatli montaj va CC</span></li>
-            </ul>
-            <button className="w-full py-4 border border-gray-700 text-white hover:bg-white hover:text-black transition-colors">Tanlash</button>
-          </motion.div>
-
-          {/* Card 3 (Recommended) */}
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="p-8 border border-white bg-white/5 relative flex flex-col transform md:-translate-y-4 shadow-[0_0_40px_rgba(255,255,255,0.05)]">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white text-black px-4 py-1 text-xs font-bold uppercase tracking-widest">
-              Tavsiya etiladi
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2 mt-2">Premium</h3>
-            <p className="text-sm text-gray-400 mb-8 pb-8 border-b border-gray-700">Yuqori darajadagi ta'sir va brend imidji.</p>
-            <ul className="space-y-4 mb-10 flex-grow">
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-white shrink-0" /><span className="text-gray-200 text-sm">15 ta Reels / TikTok</span></li>
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-white shrink-0" /><span className="text-gray-200 text-sm">1 ta YouTube / Podcast epizod</span></li>
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-white shrink-0" /><span className="text-gray-200 text-sm">To'liq kontent arxitekturasi</span></li>
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-white shrink-0" /><span className="text-gray-200 text-sm">Kino darajasidagi prodyuserlik</span></li>
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-white shrink-0" /><span className="text-gray-200 text-sm">Targeting kuzatuvi</span></li>
-            </ul>
-            <button className="w-full py-4 bg-white text-black font-bold hover:bg-gray-200 transition-colors">Tanlash</button>
-          </motion.div>
-
-          {/* Card 4 */}
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="p-8 border border-gray-800 bg-[#0a0a0a] flex flex-col">
-            <h3 className="text-xl font-bold text-white mb-2">Exclusive</h3>
-            <p className="text-sm text-gray-500 mb-8 pb-8 border-b border-gray-800">Yirik brendlar uchun to'liq yechim.</p>
-            <ul className="space-y-4 mb-10 flex-grow">
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400 shrink-0" /><span className="text-gray-300 text-sm">Cheklanmagan kontent</span></li>
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400 shrink-0" /><span className="text-gray-300 text-sm">Yillik marketing strategiyasi</span></li>
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400 shrink-0" /><span className="text-gray-300 text-sm">Maxsus ijodiy jamoa (in-house)</span></li>
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400 shrink-0" /><span className="text-gray-300 text-sm">Tijorat roliklari va TVC</span></li>
-            </ul>
-            <button className="w-full py-4 border border-gray-700 text-white hover:bg-white hover:text-black transition-colors">Muhokama qilish</button>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* 6. ABOUT SECTION */}
-      <section className="py-24 px-6 md:px-12 lg:px-24 bg-[#080808]">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-white mb-8">Biz haqimizda.</h2>
-            <div className="space-y-6 text-lg text-gray-400 font-light leading-relaxed">
-              <p>
-                Biz shunchaki kamera ushlagan operatorlar emasmiz. Bizning yondashuvimiz <strong className="text-white">kreativ fikrlash</strong> va <strong className="text-white">strategik marketingni</strong> o'zida mujassam etadi.
-              </p>
-              <p>
-                Har bir loyihada auditoriya psixologiyasini o'rganamiz. Qanday ranglar, qanday tezlik va qanday so'zlar e'tiborni tortishini aniqlaymiz. Maqsadimiz – tomoshabin skroll qilishdan to'xtab, sizning brendingizga butun e'tiborini qaratishiga erishish.
-              </p>
-            </div>
-            <div className="mt-12 grid grid-cols-2 gap-8 border-t border-gray-800 pt-12">
-              <div>
-                <h4 className="text-4xl font-bold text-white mb-2">50+</h4>
-                <p className="text-sm text-gray-500 uppercase tracking-widest">Muvaffaqiyatli loyihalar</p>
-              </div>
-              <div>
-                <h4 className="text-4xl font-bold text-white mb-2">10M+</h4>
-                <p className="text-sm text-gray-500 uppercase tracking-widest">Umumiy ko'rishlar</p>
-              </div>
-            </div>
-          </motion.div>
-          
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="relative aspect-[4/5] bg-[#111] overflow-hidden border border-gray-800 flex items-center justify-center group">
-            {/* Abstract visual representation instead of generic stock */}
-            <div className="absolute inset-0 bg-gradient-to-br from-black via-[#0a0a0a] to-[#1a1a1a]"></div>
-            <div className="w-64 h-64 border border-gray-700/50 rounded-full absolute mix-blend-screen animate-pulse"></div>
-            <div className="w-48 h-48 border border-white/10 rounded-full absolute mix-blend-screen translate-x-8 -translate-y-8"></div>
-            <p className="z-10 text-white/50 tracking-widest uppercase text-sm font-light">Creative Studio Space</p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* 7. LEAD FORM SECTION */}
-      <section id="contact" className="py-32 px-6 md:px-12 lg:px-24">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tighter text-white mb-6">
-              Eslab<br/> qolinadigan<br/> kontent<br/> yaratamiz.
-            </h2>
-            <p className="text-xl text-gray-400 mb-12">Sizning brendingiz yangi bosqichga chiqishga tayyormi? Formani to'ldiring va biz siz bilan bog'lanamiz.</p>
-          </motion.div>
-
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="bg-[#0a0a0a] border border-gray-800 p-8 md:p-12">
-            <form className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs text-gray-500 uppercase tracking-wider">Ism</label>
-                  <input type="text" className="w-full bg-transparent border-b border-gray-800 pb-3 text-white focus:outline-none focus:border-white transition-colors" placeholder="Ismingizni kiriting" required />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs text-gray-500 uppercase tracking-wider">Biznes turi</label>
-                  <input type="text" className="w-full bg-transparent border-b border-gray-800 pb-3 text-white focus:outline-none focus:border-white transition-colors" placeholder="Masalan: Restoran" required />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs text-gray-500 uppercase tracking-wider">Telefon raqam</label>
-                  <input type="tel" className="w-full bg-transparent border-b border-gray-800 pb-3 text-white focus:outline-none focus:border-white transition-colors" placeholder="+998 90 123 45 67" required />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs text-gray-500 uppercase tracking-wider">Telegram Username</label>
-                  <input type="text" className="w-full bg-transparent border-b border-gray-800 pb-3 text-white focus:outline-none focus:border-white transition-colors" placeholder="@username" />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs text-gray-500 uppercase tracking-wider">Maqsad yoki Muammo</label>
-                <textarea rows={4} className="w-full bg-transparent border-b border-gray-800 pb-3 text-white focus:outline-none focus:border-white transition-colors resize-none" placeholder="Qanday natijaga erishmoqchisiz?" required></textarea>
-              </div>
-
-              <button type="submit" className="w-full py-5 bg-white text-black font-bold uppercase tracking-wider hover:bg-gray-200 transition-colors flex items-center justify-center gap-3 mt-8">
-                So'rov yuborish <Send className="w-4 h-4" />
-              </button>
-            </form>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* 8. FAQ SECTION */}
-      <section className="py-24 px-6 md:px-12 lg:px-24 bg-[#080808]">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-white mb-16 text-center">Ko‘p beriladigan savollar.</h2>
-          
-          <div className="space-y-4">
-            <FaqItem question="Ish jarayoni qanday kechadi?" answer="Biz birinchi navbatda brifni o'rganamiz va maqsadlarni belgilaymiz. So'ngra strategiya va ssenariy tayyorlanadi. Tasdiqlangach, syomka jarayoni va montaj bosqichlari amalga oshiriladi. Har bir bosqich mijoz bilan kelishilgan holda olib boriladi." />
-            <FaqItem question="Sizlar bilan oylik hamkorlik qilsa bo'ladimi?" answer="Ha, albatta. Oylik hamkorlik bizning asosiy formatimiz bo'lib, u brendingizning uzluksiz o'sishini va barqaror kontent oqimini ta'minlaydi. Paketlar bo'limida batafsil ma'lumot olishingiz mumkin." />
-            <FaqItem question="Faqat reels formatida buyurtma bersak bo'ladimi?" answer="Ha, biz faqat qisqa formadagi videolar (Reels, TikTok, Shorts) uchun maxsus xizmatlarni taqdim etamiz. Ushbu xizmat algoritm talablariga to'liq javob beradigan sifatli vizualni o'z ichiga oladi." />
-            <FaqItem question="Target reklamasini ham sozlaysizlarmi?" answer="Biz tayyorlagan video mahsulotlarni to'g'ri auditoriyaga yetkazish uchun professional targetologlarimiz reklama kampaniyalarini ham o'rnatib, nazorat qilib borishadi." />
-            <FaqItem question="Video tayyor bo'lishi uchun qancha vaqt ketadi?" answer="Loyihaning murakkabligiga qarab farq qiladi. Odatda bitta qisqa video yoki to'plam uchun ssenariydan tortib tayyor mahsulotgacha o'rtacha 5-7 ish kuni talab qilinadi." />
-          </div>
-        </motion.div>
-      </section>
-
-      {/* 9. FOOTER */}
-      <footer className="pt-24 pb-8 px-6 md:px-12 lg:px-24 bg-[#050505] border-t border-gray-900">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-12 mb-24">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-2">AGENCY.</h2>
-            <p className="text-gray-500 font-light tracking-wide uppercase text-sm">Official Creative Team</p>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-8 md:gap-16">
-            <div className="flex flex-col gap-4">
-              <span className="text-gray-600 uppercase text-xs tracking-widest font-bold">Ijtimoiy tarmoqlar</span>
-              <div className="flex gap-4">
-                <a href="#" className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:border-white transition-all"><Instagram className="w-4 h-4" /></a>
-                <a href="#" className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:border-white transition-all"><Send className="w-4 h-4" /></a>
-                <a href="#" className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:border-white transition-all"><Youtube className="w-4 h-4" /></a>
-              </div>
+    <section class="relative h-screen flex flex-col justify-center overflow-hidden px-6 md:px-12 lg:px-24">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#1a1a1a_0%,#050505_100%)] opacity-50"></div>
+        
+        <div class="relative z-10 max-w-5xl fade-up" style="transition-delay: 0.1s;">
+            <div class="mb-6 inline-flex items-center gap-3 px-4 py-2 rounded-full border border-gray-800 bg-white/5 backdrop-blur-md">
+                <span class="w-2 h-2 rounded-full bg-white pulse-dot"></span>
+                <span class="text-sm font-medium tracking-wide uppercase text-gray-300">Premium Creative Agency</span>
             </div>
             
-            <div className="flex flex-col gap-4">
-              <span className="text-gray-600 uppercase text-xs tracking-widest font-bold">Aloqa</span>
-              <a href="tel:+998901234567" className="text-white hover:text-gray-300 transition-colors text-lg">+998 90 123 45 67</a>
-              <a href="mailto:hello@agency.uz" className="text-gray-400 hover:text-white transition-colors">hello@agency.uz</a>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white leading-[1.05] mb-6 fade-up" style="transition-delay: 0.2s;">
+                E'tiborni tortadigan <br class="hidden md:block"/> 
+                va brend imidjini <br class="hidden md:block"/> 
+                yaratadigan kontent.
+            </h1>
+            
+            <p class="text-lg md:text-2xl text-gray-400 max-w-2xl mb-10 font-light leading-relaxed fade-up" style="transition-delay: 0.3s;">
+                Biz shunchaki SMM emasmiz. Biz kreativlik va marketing strategiyasini birlashtirib, auditoriyangizni hayratda qoldiradigan premium kontent yaratamiz.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 fade-up" style="transition-delay: 0.4s;">
+                <a href="#contact" class="px-8 py-4 bg-white text-black font-semibold rounded-none hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 group">
+                    Bog‘lanish <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+                <a href="#portfolio" class="px-8 py-4 bg-transparent border border-gray-700 text-white font-semibold rounded-none hover:border-white transition-colors flex items-center justify-center">
+                    Portfolio ko‘rish
+                </a>
             </div>
-          </div>
         </div>
-        
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center pt-8 border-t border-gray-900 text-sm text-gray-600">
-          <p>&copy; {new Date().getFullYear()} Creative Agency. Barcha huquqlar himoyalangan.</p>
-          <div className="flex gap-6 mt-4 md:mt-0">
-            <a href="#" className="hover:text-gray-300 transition-colors">Maxfiylik siyosati</a>
-            <a href="#" className="hover:text-gray-300 transition-colors">Foydalanish shartlari</a>
-          </div>
+    </section>
+
+    <section class="py-24 px-6 md:px-12 lg:px-24 bg-[#0a0a0a]">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="p-8 border border-gray-800/50 bg-[#080808] hover:bg-[#0c0c0c] transition-colors fade-up">
+                <h3 class="text-2xl font-bold text-white mb-4">Strategik Yondashuv</h3>
+                <p class="text-gray-400">Bu shunchaki chiroyli kadrlar emas. Har bir video marketing maqsadlariga, psixologiyaga va e'tibor iqtisodiyotiga asoslanadi.</p>
+            </div>
+            <div class="p-8 border border-gray-800/50 bg-[#080808] hover:bg-[#0c0c0c] transition-colors fade-up" style="transition-delay: 0.1s;">
+                <h3 class="text-2xl font-bold text-white mb-4">Cinematic Sifat</h3>
+                <p class="text-gray-400">Bizning jamoa yuqori darajadagi prodyuserlik va kino sanoati standartlarini brendingizga olib kiradi. Sifat – ishonch demakdir.</p>
+            </div>
+            <div class="p-8 border border-gray-800/50 bg-[#080808] hover:bg-[#0c0c0c] transition-colors fade-up" style="transition-delay: 0.2s;">
+                <h3 class="text-2xl font-bold text-white mb-4">E'tibor Markazida</h3>
+                <p class="text-gray-400">Zamonaviy dunyoda eng qimmat valyuta bu – e'tibor. Biz odamlar oxirigacha ko'radigan kontent quramiz.</p>
+            </div>
         </div>
-      </footer>
-    </div>
-  );
-}
+    </section>
 
-// Custom FAQ Accordion Component
-function FaqItem({ question, answer }: { question: string, answer: string }) {
-  const [isOpen, setIsOpen] = useState(false);
+    <section id="portfolio" class="py-32 overflow-hidden fade-up">
+        <div class="px-6 md:px-12 lg:px-24 mb-12 flex flex-col md:flex-row justify-between items-end gap-6">
+            <h2 class="text-4xl md:text-6xl font-bold tracking-tighter text-white">Tanlangan <br/> Ishlarimiz.</h2>
+            <p class="text-gray-400 max-w-sm text-right">Biz yaratgan vizual hikoyalar va kreativ yechimlar bilan tanishing.</p>
+        </div>
 
-  return (
-    <div className="border-b border-gray-800">
-      <button 
-        onClick={() => setIsOpen(!isOpen)} 
-        className="w-full py-6 flex justify-between items-center text-left focus:outline-none group"
-      >
-        <span className="text-lg md:text-xl font-medium text-white group-hover:text-gray-300 transition-colors">{question}</span>
-        <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
-          <ChevronDown className="w-5 h-5 text-gray-500" />
-        </motion.div>
-      </button>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div 
-            initial={{ height: 0, opacity: 0 }} 
-            animate={{ height: "auto", opacity: 1 }} 
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="overflow-hidden"
-          >
-            <p className="pb-6 text-gray-400 leading-relaxed pr-8">{answer}</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
+        <div class="flex overflow-x-auto gap-6 px-6 md:px-12 lg:px-24 pb-12 snap-x snap-mandatory hide-scrollbar">
+            <div class="snap-center shrink-0 w-[85vw] md:w-[600px] aspect-video relative group bg-[#0a0a0a] border border-gray-800 flex items-center justify-center overflow-hidden cursor-pointer hover:border-gray-500 transition-colors">
+                <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center z-20 group-hover:scale-110 group-hover:bg-white transition-all duration-300">
+                    <i data-lucide="play" class="w-6 h-6 text-white group-hover:text-black ml-1"></i>
+                </div>
+                <div class="absolute bottom-6 left-6 z-20">
+                    <span class="px-3 py-1 bg-white/10 backdrop-blur-md border border-white/10 text-white text-xs uppercase tracking-wider mb-3 inline-block">Commercial</span>
+                    <h4 class="text-2xl font-bold text-white group-hover:translate-x-2 transition-transform duration-300">Brand Identity Film</h4>
+                </div>
+            </div>
+
+            <div class="snap-center shrink-0 w-[85vw] md:w-[600px] aspect-video relative group bg-[#0a0a0a] border border-gray-800 flex items-center justify-center overflow-hidden cursor-pointer hover:border-gray-500 transition-colors">
+                <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center z-20 group-hover:scale-110 group-hover:bg-white transition-all duration-300">
+                    <i data-lucide="play" class="w-6 h-6 text-white group-hover:text-black ml-1"></i>
+                </div>
+                <div class="absolute bottom-6 left-6 z-20">
+                    <span class="px-3 py-1 bg-white/10 backdrop-blur-md border border-white/10 text-white text-xs uppercase tracking-wider mb-3 inline-block">Reels</span>
+                    <h4 class="text-2xl font-bold text-white group-hover:translate-x-2 transition-transform duration-300">Dynamic Product Showcase</h4>
+                </div>
+            </div>
+            
+            <div class="snap-center shrink-0 w-[85vw] md:w-[600px] aspect-video relative group bg-[#0a0a0a] border border-gray-800 flex items-center justify-center overflow-hidden cursor-pointer hover:border-gray-500 transition-colors">
+                <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center z-20 group-hover:scale-110 group-hover:bg-white transition-all duration-300">
+                    <i data-lucide="play" class="w-6 h-6 text-white group-hover:text-black ml-1"></i>
+                </div>
+                <div class="absolute bottom-6 left-6 z-20">
+                    <span class="px-3 py-1 bg-white/10 backdrop-blur-md border border-white/10 text-white text-xs uppercase tracking-wider mb-3 inline-block">Interview</span>
+                    <h4 class="text-2xl font-bold text-white group-hover:translate-x-2 transition-transform duration-300">Founder's Story</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 md:px-12 lg:px-24 bg-[#080808]">
+        <div class="mb-16 fade-up">
+            <h2 class="text-4xl md:text-5xl font-bold tracking-tighter text-white">Bizning xizmatlar.</h2>
+            <div class="w-full h-[1px] bg-gray-800 mt-8"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-16 gap-x-12">
+            <div class="group fade-up">
+                <i data-lucide="video" class="w-10 h-10 text-gray-500 mb-6 group-hover:text-white transition-colors duration-300"></i>
+                <h3 class="text-2xl font-bold text-white mb-3">Creative Reels Production</h3>
+                <p class="text-gray-400 leading-relaxed">Algoritmlarga moslashgan, e'tiborni ushlab turuvchi qisqa metrajli, yuqori sifatli videolar.</p>
+            </div>
+            <div class="group fade-up" style="transition-delay: 0.1s;">
+                <i data-lucide="monitor-play" class="w-10 h-10 text-gray-500 mb-6 group-hover:text-white transition-colors duration-300"></i>
+                <h3 class="text-2xl font-bold text-white mb-3">YouTube Content</h3>
+                <p class="text-gray-400 leading-relaxed">Kanal strategiyasidan tortib, syomka va montajgacha bo'lgan to'liq prodyuserlik.</p>
+            </div>
+            <div class="group fade-up" style="transition-delay: 0.2s;">
+                <i data-lucide="trending-up" class="w-10 h-10 text-gray-500 mb-6 group-hover:text-white transition-colors duration-300"></i>
+                <h3 class="text-2xl font-bold text-white mb-3">Content Strategy</h3>
+                <p class="text-gray-400 leading-relaxed">Brendingiz uchun oylik va yillik kontent rejalar, pozitsiyalash va auditoriya tahlili.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-6 md:px-12 lg:px-24">
+        <div class="text-center mb-20 fade-up">
+            <h2 class="text-4xl md:text-6xl font-bold tracking-tighter text-white mb-4">Sarmoya.</h2>
+            <p class="text-gray-400">Sizning biznesingizga mos keladigan premium yechimlar.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            <div class="p-8 border border-gray-800 bg-[#0a0a0a] flex flex-col fade-up">
+                <h3 class="text-xl font-bold text-white mb-2">Test Package</h3>
+                <p class="text-sm text-gray-500 mb-8 pb-8 border-b border-gray-800">Hamkorlikni boshlash uchun mukammal tanlov.</p>
+                <ul class="space-y-4 mb-10 flex-grow">
+                    <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-gray-400 shrink-0"></i><span class="text-gray-300 text-sm">3 ta qisqa video (Reels)</span></li>
+                    <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-gray-400 shrink-0"></i><span class="text-gray-300 text-sm">Ssenariy yozish va dizayn</span></li>
+                </ul>
+                <button class="w-full py-4 border border-gray-700 text-white hover:bg-white hover:text-black transition-colors mt-auto">Tanlash</button>
+            </div>
+
+            <div class="p-8 border border-white bg-white/5 relative flex flex-col transform md:-translate-y-4 shadow-[0_0_40px_rgba(255,255,255,0.05)] fade-up" style="transition-delay: 0.1s;">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white text-black px-4 py-1 text-xs font-bold uppercase tracking-widest">
+                    Tavsiya etiladi
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2 mt-2">Premium</h3>
+                <p class="text-sm text-gray-400 mb-8 pb-8 border-b border-gray-700">Yuqori darajadagi ta'sir va brend imidji.</p>
+                <ul class="space-y-4 mb-10 flex-grow">
+                    <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-white shrink-0"></i><span class="text-gray-200 text-sm">15 ta Reels / TikTok</span></li>
+                    <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-white shrink-0"></i><span class="text-gray-200 text-sm">Kino darajasidagi prodyuserlik</span></li>
+                    <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-white shrink-0"></i><span class="text-gray-200 text-sm">To'liq kontent arxitekturasi</span></li>
+                </ul>
+                <button class="w-full py-4 bg-white text-black font-bold hover:bg-gray-200 transition-colors mt-auto">Tanlash</button>
+            </div>
+
+            <div class="p-8 border border-gray-800 bg-[#0a0a0a] flex flex-col fade-up" style="transition-delay: 0.2s;">
+                <h3 class="text-xl font-bold text-white mb-2">Exclusive</h3>
+                <p class="text-sm text-gray-500 mb-8 pb-8 border-b border-gray-800">Yirik brendlar uchun to'liq yechim.</p>
+                <ul class="space-y-4 mb-10 flex-grow">
+                    <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-gray-400 shrink-0"></i><span class="text-gray-300 text-sm">Cheklanmagan kontent</span></li>
+                    <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-gray-400 shrink-0"></i><span class="text-gray-300 text-sm">Maxsus ijodiy jamoa (in-house)</span></li>
+                </ul>
+                <button class="w-full py-4 border border-gray-700 text-white hover:bg-white hover:text-black transition-colors mt-auto">Muhokama qilish</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-32 px-6 md:px-12 lg:px-24">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+            <div class="fade-up">
+                <h2 class="text-5xl md:text-7xl font-bold tracking-tighter text-white mb-6">
+                    Eslab<br/> qolinadigan<br/> kontent<br/> yaratamiz.
+                </h2>
+                <p class="text-xl text-gray-400 mb-12">Sizning brendingiz yangi bosqichga chiqishga tayyormi? Formani to'ldiring va biz siz bilan bog'lanamiz.</p>
+            </div>
+
+            <div class="bg-[#0a0a0a] border border-gray-800 p-8 md:p-12 fade-up" style="transition-delay: 0.2s;">
+                <form class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-xs text-gray-500 uppercase tracking-wider">Ism</label>
+                            <input type="text" class="w-full bg-transparent border-b border-gray-800 pb-3 text-white focus:outline-none focus:border-white transition-colors" placeholder="Ismingizni kiriting" required>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs text-gray-500 uppercase tracking-wider">Telefon raqam</label>
+                            <input type="tel" class="w-full bg-transparent border-b border-gray-800 pb-3 text-white focus:outline-none focus:border-white transition-colors" placeholder="+998 90 123 45 67" required>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs text-gray-500 uppercase tracking-wider">Maqsad</label>
+                        <textarea rows="4" class="w-full bg-transparent border-b border-gray-800 pb-3 text-white focus:outline-none focus:border-white transition-colors resize-none" placeholder="Qanday natijaga erishmoqchisiz?" required></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-5 bg-white text-black font-bold uppercase tracking-wider hover:bg-gray-200 transition-colors flex items-center justify-center gap-3 mt-8">
+                        So'rov yuborish <i data-lucide="send" class="w-4 h-4"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 md:px-12 lg:px-24 bg-[#080808]">
+        <div class="max-w-3xl mx-auto fade-up">
+            <h2 class="text-3xl md:text-5xl font-bold tracking-tighter text-white mb-16 text-center">Ko‘p beriladigan savollar.</h2>
+            
+            <div class="space-y-4" id="faq-container">
+                <div class="border-b border-gray-800 faq-item">
+                    <button class="w-full py-6 flex justify-between items-center text-left focus:outline-none group" onclick="toggleFaq(this)">
+                        <span class="text-lg md:text-xl font-medium text-white group-hover:text-gray-300 transition-colors">Ish jarayoni qanday kechadi?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-gray-500 transition-transform duration-300"></i>
+                    </button>
+                    <div class="overflow-hidden max-h-0 transition-all duration-300 ease-in-out">
+                        <p class="pb-6 text-gray-400 leading-relaxed pr-8">Biz birinchi navbatda brifni o'rganamiz va maqsadlarni belgilaymiz. So'ngra strategiya va ssenariy tayyorlanadi. Tasdiqlangach, syomka jarayoni va montaj bosqichlari amalga oshiriladi.</p>
+                    </div>
+                </div>
+
+                <div class="border-b border-gray-800 faq-item">
+                    <button class="w-full py-6 flex justify-between items-center text-left focus:outline-none group" onclick="toggleFaq(this)">
+                        <span class="text-lg md:text-xl font-medium text-white group-hover:text-gray-300 transition-colors">Sizlar bilan oylik hamkorlik qilsa bo'ladimi?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-gray-500 transition-transform duration-300"></i>
+                    </button>
+                    <div class="overflow-hidden max-h-0 transition-all duration-300 ease-in-out">
+                        <p class="pb-6 text-gray-400 leading-relaxed pr-8">Ha, albatta. Oylik hamkorlik bizning asosiy formatimiz bo'lib, u brendingizning uzluksiz o'sishini ta'minlaydi.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="pt-24 pb-8 px-6 md:px-12 lg:px-24 bg-[#050505] border-t border-gray-900">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-12 mb-24">
+            <div>
+                <h2 class="text-2xl font-bold text-white mb-2">AGENCY.</h2>
+                <p class="text-gray-500 font-light tracking-wide uppercase text-sm">Official Creative Team</p>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-8 md:gap-16">
+                <div class="flex flex-col gap-4">
+                    <span class="text-gray-600 uppercase text-xs tracking-widest font-bold">Aloqa</span>
+                    <a href="tel:+998901234567" class="text-white hover:text-gray-300 transition-colors text-lg">+998 90 123 45 67</a>
+                    <a href="mailto:hello@agency.uz" class="text-gray-400 hover:text-white transition-colors">hello@agency.uz</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Lucide ikonkalarni ishga tushirish
+        lucide.createIcons();
+
+        // FAQ bosilganda ochilishi uchun sodda JavaScript
+        function toggleFaq(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('i');
+            
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Scroll qilinganda elementlar sekin paydo bo'lishi (Fade Up animatsiya)
+        document.addEventListener("DOMContentLoaded", () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.fade-up').forEach((el) => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
