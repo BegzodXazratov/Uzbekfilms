@@ -1,315 +1,806 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Creative Agency</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #050505;
-            color: #e5e7eb;
-            overflow-x: hidden;
-        }
-        
-        /* Silliq scroll */
-        html { scroll-behavior: smooth; }
-        
-        /* Gorizontal scrollbar ni yashirish */
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+<meta charset="UTF-8">
+<title>Tasma.vs — Tizimli kontent marketing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Tasma.vs — brendlar uchun kreativ Reels va YouTube production.">
 
-        /* Kadrlar uchun animatsiya */
-        .fade-up {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .fade-up.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .pulse-dot {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: .5; }
-        }
-    </style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#08070A;--bg-soft:#0E0D12;--bg-card:#141318;
+  --text:#F0ECE2;--text-muted:#7A7580;--text-dim:#4A4650;
+  --accent:#C9A961;--accent-glow:rgba(201,169,97,0.4);--accent-hot:#E55E2C;
+  --line:rgba(240,236,226,0.06);--line-strong:rgba(240,236,226,0.12);
+  --glass:rgba(20,19,24,0.6);--glass-border:rgba(240,236,226,0.08);
+}
+*{-webkit-font-smoothing:antialiased;margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Oswald',sans-serif;overflow-x:hidden;cursor:none}
+
+.font-display{font-family:'Bebas Neue',cursive;letter-spacing:0.02em}
+.font-body{font-family:'Oswald',sans-serif}
+
+/* Cursor */
+.cursor-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference}
+.cursor-ring{width:40px;height:40px;border:1px solid var(--accent);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transition:width .3s,height .3s,border-color .3s}
+.cursor-ring.hover{width:60px;height:60px;border-color:var(--accent-hot)}
+@media(max-width:1024px){body{cursor:auto}.cursor-dot,.cursor-ring{display:none}}
+
+/* Grain */
+.grain{position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.05;mix-blend-mode:overlay;
+background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/></svg>")}
+
+#three-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
+/* Glass */
+.glass{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--glass-border)}
+.glass-strong{background:rgba(14,13,18,0.78);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1px solid rgba(201,169,97,0.08)}
+
+/* Glow */
+.glow-text{text-shadow:0 0 40px var(--accent-glow),0 0 80px rgba(201,169,97,0.15)}
+.glow-border{position:relative}
+.glow-border::before{content:'';position:absolute;inset:-1px;border-radius:inherit;background:linear-gradient(135deg,var(--accent),transparent 40%,transparent 60%,var(--accent));opacity:0;transition:opacity .5s;z-index:-1}
+.glow-border:hover::before{opacity:.5}
+
+/* Animated rotating border */
+@property --angle{syntax:'<angle>';initial-value:0deg;inherits:false}
+@keyframes borderRotate{to{--angle:360deg}}
+.animated-border{position:relative;overflow:hidden}
+.animated-border::before{content:'';position:absolute;inset:-2px;z-index:-1;background:conic-gradient(from var(--angle),transparent,var(--accent),transparent,var(--accent),transparent);animation:borderRotate 6s linear infinite;border-radius:inherit}
+.animated-border::after{content:'';position:absolute;inset:1px;z-index:-1;background:var(--bg-card);border-radius:inherit}
+
+/* Frame tag */
+.frame-tag{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.2em;color:var(--text-dim);text-transform:uppercase;font-weight:400}
+.frame-tag-accent{color:var(--accent)}
+
+/* Blink */
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:.15}}
+.rec-dot{animation:blink 1.4s infinite}
+
+/* Marquee */
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.marquee-track{display:inline-flex;animation:marquee 35s linear infinite;white-space:nowrap}
+
+/* Hero animations */
+.hero-line{display:block;overflow:hidden}
+.hero-line span{display:inline-block;transform:translateY(115%);animation:rise 1.4s cubic-bezier(.16,1,.3,1) forwards}
+.hero-line:nth-child(1) span{animation-delay:.3s}
+.hero-line:nth-child(2) span{animation-delay:.5s}
+@keyframes rise{to{transform:translateY(0)}}
+
+/* Strikethrough effect */
+.strike-through{
+  position:relative;display:inline-block;
+  color:var(--text-muted);
+}
+.strike-through::after{
+  content:'';position:absolute;left:0;top:50%;width:0;height:3px;
+  background:var(--accent-hot);transform:translateY(-50%);
+  animation:strikeGrow 1.2s cubic-bezier(.16,1,.3,1) 0.8s forwards;
+}
+@keyframes strikeGrow{to{width:100%}}
+
+/* Cards */
+.portfolio-card{position:relative;overflow:hidden;background:var(--bg-card);transition:transform .6s cubic-bezier(.22,1,.36,1),box-shadow .6s;border:1px solid var(--line)}
+.portfolio-card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 30px 60px -15px rgba(0,0,0,.5),0 0 40px -10px var(--accent-glow)}
+.portfolio-card img{transition:transform 1.5s cubic-bezier(.22,1,.36,1),filter .8s;filter:saturate(.7) contrast(1.1) brightness(.9)}
+.portfolio-card:hover img{transform:scale(1.08);filter:saturate(1) contrast(1) brightness(1)}
+
+.tariff-card{background:var(--glass);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--line);transition:all .5s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden}
+.tariff-card::before{content:'';position:absolute;top:0;left:0;right:0;height:200px;background:radial-gradient(ellipse at top,rgba(201,169,97,.04) 0%,transparent 70%);pointer-events:none}
+.tariff-card:hover{border-color:rgba(201,169,97,.3);transform:translateY(-8px);box-shadow:0 30px 60px -15px rgba(0,0,0,.4),0 0 50px -15px var(--accent-glow)}
+.tariff-featured{border-color:rgba(201,169,97,.2)}
+.tariff-featured::before{background:radial-gradient(ellipse at top,rgba(201,169,97,.08) 0%,transparent 70%)}
+
+/* Service cards */
+.service-card{background:var(--glass);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--line);transition:all .4s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden}
+.service-card:hover{border-color:rgba(201,169,97,.3);transform:translateY(-6px);box-shadow:0 20px 50px -15px rgba(0,0,0,.4),0 0 30px -10px var(--accent-glow)}
+.service-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transition:transform .4s ease;transform-origin:left}
+.service-card:hover::after{transform:scaleX(1)}
+
+/* Buttons */
+.btn-primary{background:var(--accent);color:var(--bg);font-weight:600;transition:all .4s cubic-bezier(.22,1,.36,1);display:inline-block;position:relative;overflow:hidden;font-family:'Oswald',sans-serif;letter-spacing:.1em}
+.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transform:translateX(-100%);transition:transform .6s}
+.btn-primary:hover::before{transform:translateX(100%)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 10px 30px -5px var(--accent-glow)}
+.btn-ghost{border:1px solid var(--line-strong);color:var(--text);transition:all .4s;display:inline-block;font-family:'Oswald',sans-serif;letter-spacing:.1em}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);box-shadow:0 0 20px -5px var(--accent-glow)}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .3s ease;pointer-events:none}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{background:var(--bg-soft);border:1px solid rgba(201,169,97,0.2);border-radius:20px;padding:40px;width:100%;max-width:480px;transform:translateY(30px) scale(.97);transition:transform .4s cubic-bezier(.16,1,.3,1);box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 60px -20px var(--accent-glow)}
+.modal-overlay.open .modal-box{transform:translateY(0) scale(1)}
+.modal-input{background:rgba(255,255,255,0.04);border:1px solid var(--line-strong);border-radius:10px;padding:14px 16px;color:var(--text);font-family:'Oswald',sans-serif;font-size:15px;width:100%;outline:none;transition:border-color .3s}
+.modal-input:focus{border-color:var(--accent)}
+.modal-input::placeholder{color:var(--text-dim)}
+.modal-select option{background:var(--bg-soft)}
+
+/* Form */
+input,textarea,select{background:transparent;border:none;border-bottom:1px solid var(--line-strong);color:var(--text);font-family:'Oswald',sans-serif;font-size:17px;padding:14px 0;width:100%;outline:none;transition:border-color .4s,box-shadow .4s}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+input::placeholder,textarea::placeholder{color:var(--text-dim)}
+select option{background:var(--bg-soft);color:var(--text)}
+
+.faq-item{border-bottom:1px solid var(--line)}
+.swiper-button-next,.swiper-button-prev{color:var(--accent)!important}
+.swiper-button-next::after,.swiper-button-prev::after{font-size:18px!important}
+.swiper-pagination-bullet{background:var(--text)!important;opacity:.2!important}
+.swiper-pagination-bullet-active{background:var(--accent)!important;opacity:1!important}
+
+/* Orbs */
+.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+.orb-accent{background:var(--accent)}
+.orb-hot{background:var(--accent-hot)}
+.orb-purple{background:#6B4CE6}
+
+/* Section line */
+.section-glow-top{position:relative}
+.section-glow-top::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.25}
+
+.counter-glow{position:relative}
+.counter-glow::after{content:'';position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(circle,var(--accent-glow) 0%,transparent 70%);opacity:0;transition:opacity .6s;pointer-events:none}
+.counter-glow:hover::after{opacity:.4}
+
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+.mobile-menu{background:var(--bg-soft);backdrop-filter:blur(20px)}
+</style>
 </head>
-<body class="selection:bg-white selection:text-black">
 
-    <section class="relative h-screen flex flex-col justify-center overflow-hidden px-6 md:px-12 lg:px-24">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#1a1a1a_0%,#050505_100%)] opacity-50"></div>
-        
-        <div class="relative z-10 max-w-5xl fade-up" style="transition-delay: 0.1s;">
-            <div class="mb-6 inline-flex items-center gap-3 px-4 py-2 rounded-full border border-gray-800 bg-white/5 backdrop-blur-md">
-                <span class="w-2 h-2 rounded-full bg-white pulse-dot"></span>
-                <span class="text-sm font-medium tracking-wide uppercase text-gray-300">Premium Creative Agency</span>
-            </div>
-            
-            <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white leading-[1.05] mb-6 fade-up" style="transition-delay: 0.2s;">
-                E'tiborni tortadigan <br class="hidden md:block"/> 
-                va brend imidjini <br class="hidden md:block"/> 
-                yaratadigan kontent.
-            </h1>
-            
-            <p class="text-lg md:text-2xl text-gray-400 max-w-2xl mb-10 font-light leading-relaxed fade-up" style="transition-delay: 0.3s;">
-                Biz shunchaki SMM emasmiz. Biz kreativlik va marketing strategiyasini birlashtirib, auditoriyangizni hayratda qoldiradigan premium kontent yaratamiz.
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-4 fade-up" style="transition-delay: 0.4s;">
-                <a href="#contact" class="px-8 py-4 bg-white text-black font-semibold rounded-none hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 group">
-                    Bog‘lanish <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
-                </a>
-                <a href="#portfolio" class="px-8 py-4 bg-transparent border border-gray-700 text-white font-semibold rounded-none hover:border-white transition-colors flex items-center justify-center">
-                    Portfolio ko‘rish
-                </a>
-            </div>
+<body>
+<!-- Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grain"></div>
+<canvas id="three-canvas"></canvas>
+
+<!-- POPUP MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="flex justify-between items-start mb-8">
+      <div>
+        <div class="frame-tag frame-tag-accent mb-2">TASMA.VS</div>
+        <h3 class="font-display text-4xl">Buyurtma berish</h3>
+      </div>
+      <button onclick="closeModal()" class="w-10 h-10 flex items-center justify-center rounded-full" style="border:1px solid var(--line-strong);color:var(--text-muted)">✕</button>
+    </div>
+    <form id="orderForm" onsubmit="handleSubmit(event)" class="space-y-5">
+      <div>
+        <label class="frame-tag block mb-2">ISMINGIZ</label>
+        <input type="text" id="clientName" class="modal-input" required placeholder="Ismingizni kiriting">
+      </div>
+      <div>
+        <label class="frame-tag block mb-2">TELEFON</label>
+        <input type="tel" id="clientPhone" class="modal-input" required placeholder="+998 XX XXX XX XX">
+      </div>
+      <div>
+        <label class="frame-tag block mb-2">TARIF</label>
+        <select id="clientTariff" class="modal-input modal-select" required>
+          <option value="" disabled selected>Tanlang...</option>
+          <option>START-UP — $599 (10 ta Reels)</option>
+          <option>BUSINESS GROWTH — $800 (12 ta Reels)</option>
+          <option>VIP DOMINANT — $1000 (14 ta Reels + Targeting)</option>
+          <option>YouTube Premium — from $200</option>
+        </select>
+      </div>
+      <div>
+        <label class="frame-tag block mb-2">XIZMAT TURI</label>
+        <select id="clientService" class="modal-input modal-select" required>
+          <option value="" disabled selected>Tanlang...</option>
+          <option>Reels Production</option>
+          <option>YouTube Kontent</option>
+          <option>Kontent Plan</option>
+          <option>Targeting</option>
+          <option>Hammasi kerak</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-primary w-full py-4 text-center rounded-xl" style="font-size:15px;letter-spacing:.15em;text-transform:uppercase">
+        Telegram orqali yuborish →
+      </button>
+      <p class="text-center text-xs" style="color:var(--text-dim)">24 soat ichida javob beramiz</p>
+    </form>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header x-data="{open:false,scrolled:false}" @scroll.window="scrolled=window.scrollY>50" :class="scrolled?'glass':''" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+  <div class="max-w-[1440px] mx-auto px-6 lg:px-12 py-5 flex items-center justify-between">
+    <a href="#" class="font-body font-semibold text-sm tracking-[.25em] uppercase">TASMA<span style="color:var(--accent)">.</span>VS</a>
+    <nav class="hidden lg:flex items-center gap-10">
+      <a href="#portfolio" class="frame-tag hover:text-[var(--accent)] transition-colors">Portfolio</a>
+      <a href="#services" class="frame-tag hover:text-[var(--accent)] transition-colors">Xizmatlar</a>
+      <a href="#pricing" class="frame-tag hover:text-[var(--accent)] transition-colors">Tariflar</a>
+      <a href="#contact" class="frame-tag hover:text-[var(--accent)] transition-colors">Aloqa</a>
+    </nav>
+    <button onclick="openModal()" class="hidden lg:inline-block btn-primary px-6 py-2.5 text-xs rounded-lg">Buyurtma berish</button>
+    <button @click="open=!open" class="lg:hidden" style="color:var(--text)">
+      <svg x-show="!open" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/></svg>
+      <svg x-show="open" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
+    </button>
+  </div>
+  <div x-show="open" x-transition class="lg:hidden mobile-menu border-t" style="border-color:var(--line)">
+    <nav class="px-6 py-8 flex flex-col gap-6">
+      <a @click="open=false" href="#portfolio" class="frame-tag uppercase">Portfolio</a>
+      <a @click="open=false" href="#services" class="frame-tag uppercase">Xizmatlar</a>
+      <a @click="open=false" href="#pricing" class="frame-tag uppercase">Tariflar</a>
+      <a @click="open=false" href="#contact" class="frame-tag uppercase">Aloqa</a>
+      <button onclick="openModal()" class="btn-primary px-5 py-3 text-xs uppercase tracking-wider text-center rounded-lg">Buyurtma berish</button>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="relative min-h-screen flex items-center pt-32 pb-24 px-6 lg:px-12 overflow-hidden">
+  <div class="orb orb-accent w-[600px] h-[600px] -top-40 -right-40" style="opacity:.07"></div>
+  <div class="orb orb-hot w-[400px] h-[400px] bottom-20 -left-40" style="opacity:.04"></div>
+
+  <!-- Side HUD -->
+  <div class="hidden lg:flex absolute left-12 top-1/2 -translate-y-1/2 flex-col gap-8 z-10">
+    <div class="flex items-center gap-2 frame-tag"><span class="rec-dot w-2 h-2 rounded-full inline-block" style="background:var(--accent-hot)"></span>REC</div>
+    <div class="frame-tag" style="writing-mode:vertical-rl">00:01 / SCENE 01 / TASMA.VS</div>
+  </div>
+  <div class="hidden lg:block absolute right-12 top-1/2 -translate-y-1/2 z-10">
+    <div class="frame-tag" style="writing-mode:vertical-rl">9:16 / 24FPS / S-LOG3</div>
+  </div>
+
+  <div class="relative z-10 max-w-[1440px] mx-auto w-full">
+    <div class="flex items-center gap-3 mb-8">
+      <span class="w-16 h-px" style="background:var(--accent)"></span>
+      <span class="frame-tag frame-tag-accent">Sahifa 1</span>
+    </div>
+
+    <!-- Strikethrough line -->
+    <div class="mb-4">
+      <span class="font-display text-2xl md:text-3xl lg:text-4xl strike-through" style="letter-spacing:.05em">
+        Instagramga video qilish
+      </span>
+    </div>
+
+    <!-- Main headline -->
+    <h1 class="font-display leading-[.9]" style="font-size:clamp(3.5rem,10vw,10rem)">
+      <span class="hero-line"><span>Tizimli kontent</span></span>
+      <span class="hero-line"><span class="glow-text" style="color:var(--accent)">marketing</span></span>
+    </h1>
+
+    <div class="mt-14 lg:mt-20 grid lg:grid-cols-12 gap-10 items-end">
+      <div class="lg:col-span-5" id="heroSub">
+        <p class="text-lg lg:text-xl leading-relaxed" style="color:var(--text-muted);font-weight:300">
+          Brendlar uchun kreativ Reels va YouTube production. Oddiy SMM emas — esda qoladigan kontent.
+        </p>
+      </div>
+      <div class="lg:col-span-7 flex flex-wrap gap-4 lg:justify-end" id="heroCTA">
+        <a href="#portfolio" class="btn-primary px-8 py-4 text-xs uppercase tracking-wider rounded-lg">Ishlarimizni ko'rish →</a>
+        <button onclick="openModal()" class="btn-ghost px-8 py-4 text-xs uppercase tracking-wider rounded-lg">Buyurtma berish</button>
+      </div>
+    </div>
+
+    <div class="mt-24 lg:mt-36 grid grid-cols-2 lg:grid-cols-4 gap-8 pt-8 border-t" style="border-color:var(--line)" id="heroMeta">
+      <div><div class="frame-tag mb-2">FORMAT</div><div class="font-display text-2xl">Reels · YouTube</div></div>
+      <div><div class="frame-tag mb-2">BAZA</div><div class="font-display text-2xl">Toshkent</div></div>
+      <div><div class="frame-tag mb-2">YIL</div><div class="font-display text-2xl">2026 —</div></div>
+      <div><div class="frame-tag mb-2">HOLAT</div><div class="font-display text-2xl" style="color:var(--accent)">● Onlayn</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<section class="py-8 border-y" style="border-color:var(--line)">
+  <div class="marquee-track font-display" style="font-size:clamp(2.5rem,6vw,5rem);opacity:.7">
+    <span class="mx-8">Tasma.vs</span><span class="mx-6" style="color:var(--accent)">✦</span>
+    <span class="mx-8">Reels Production</span><span class="mx-6" style="color:var(--accent)">✦</span>
+    <span class="mx-8">YouTube Kontent</span><span class="mx-6" style="color:var(--accent)">✦</span>
+    <span class="mx-8">Targeting</span><span class="mx-6" style="color:var(--accent)">✦</span>
+    <span class="mx-8">Kontent Plan</span><span class="mx-6" style="color:var(--accent)">✦</span>
+    <span class="mx-8">Tasma.vs</span><span class="mx-6" style="color:var(--accent)">✦</span>
+    <span class="mx-8">Reels Production</span><span class="mx-6" style="color:var(--accent)">✦</span>
+    <span class="mx-8">YouTube Kontent</span><span class="mx-6" style="color:var(--accent)">✦</span>
+    <span class="mx-8">Targeting</span><span class="mx-6" style="color:var(--accent)">✦</span>
+    <span class="mx-8">Kontent Plan</span><span class="mx-6" style="color:var(--accent)">✦</span>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" class="py-28 lg:py-36 px-6 lg:px-12 relative section-glow-top">
+  <div class="orb orb-purple w-[500px] h-[500px] top-20 right-0" style="opacity:.04"></div>
+  <div class="max-w-[1440px] mx-auto relative z-10">
+    <div class="flex items-end justify-between mb-16 lg:mb-24" data-animate="fade-up">
+      <div>
+        <div class="flex items-center gap-3 mb-6"><span class="w-16 h-px" style="background:var(--accent)"></span><span class="frame-tag frame-tag-accent">01 / PORTFOLIO</span></div>
+        <h2 class="font-display glow-text" style="font-size:clamp(3rem,8vw,8rem);line-height:.9;color:var(--accent)">Bizning ishlar</h2>
+      </div>
+      <div class="hidden md:block frame-tag">08 KADR</div>
+    </div>
+    <div class="swiper portfolio-swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><div class="portfolio-card aspect-[9/16] rounded-xl"><img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?q=80&w=900&auto=format&fit=crop" alt="" class="absolute inset-0 w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div><div class="absolute top-4 left-4"><span class="glass px-3 py-1 rounded-full frame-tag" style="color:var(--accent)">Reels</span></div><div class="absolute bottom-6 left-6 right-6"><div class="font-display text-2xl mb-1">Brend Lansirovkasi</div><div class="frame-tag">Reels production · 6 ta</div></div></div></div>
+        <div class="swiper-slide"><div class="portfolio-card aspect-[9/16] rounded-xl"><img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=900&auto=format&fit=crop" alt="" class="absolute inset-0 w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div><div class="absolute top-4 left-4"><span class="glass px-3 py-1 rounded-full frame-tag" style="color:var(--accent)">YouTube</span></div><div class="absolute bottom-6 left-6 right-6"><div class="font-display text-2xl mb-1">Intervyu Seriya</div><div class="frame-tag">Long-form · 12 dq</div></div></div></div>
+        <div class="swiper-slide"><div class="portfolio-card aspect-[9/16] rounded-xl"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=900&auto=format&fit=crop" alt="" class="absolute inset-0 w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div><div class="absolute top-4 left-4"><span class="glass px-3 py-1 rounded-full frame-tag" style="color:var(--accent)">Ad</span></div><div class="absolute bottom-6 left-6 right-6"><div class="font-display text-2xl mb-1">Mahsulot Reklamasi</div><div class="frame-tag">Performance ad</div></div></div></div>
+        <div class="swiper-slide"><div class="portfolio-card aspect-[9/16] rounded-xl"><img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=900&auto=format&fit=crop" alt="" class="absolute inset-0 w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div><div class="absolute top-4 left-4"><span class="glass px-3 py-1 rounded-full frame-tag" style="color:var(--accent)">Reels</span></div><div class="absolute bottom-6 left-6 right-6"><div class="font-display text-2xl mb-1">Lifestyle Vlog</div><div class="frame-tag">Personal brand</div></div></div></div>
+        <div class="swiper-slide"><div class="portfolio-card aspect-[9/16] rounded-xl"><img src="https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?q=80&w=900&auto=format&fit=crop" alt="" class="absolute inset-0 w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div><div class="absolute top-4 left-4"><span class="glass px-3 py-1 rounded-full frame-tag" style="color:var(--accent)">Doc</span></div><div class="absolute bottom-6 left-6 right-6"><div class="font-display text-2xl mb-1">Hujjatli Format</div><div class="frame-tag">Mini doc · 5 dq</div></div></div></div>
+        <div class="swiper-slide"><div class="portfolio-card aspect-[9/16] rounded-xl"><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=900&auto=format&fit=crop" alt="" class="absolute inset-0 w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div><div class="absolute top-4 left-4"><span class="glass px-3 py-1 rounded-full frame-tag" style="color:var(--accent)">Cinema</span></div><div class="absolute bottom-6 left-6 right-6"><div class="font-display text-2xl mb-1">Cinematic Spot</div><div class="frame-tag">Brend filmi</div></div></div></div>
+        <div class="swiper-slide"><div class="portfolio-card aspect-[9/16] rounded-xl"><img src="https://images.unsplash.com/photo-1611162616475-46b635cb6868?q=80&w=900&auto=format&fit=crop" alt="" class="absolute inset-0 w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div><div class="absolute top-4 left-4"><span class="glass px-3 py-1 rounded-full frame-tag" style="color:var(--accent)">Reels</span></div><div class="absolute bottom-6 left-6 right-6"><div class="font-display text-2xl mb-1">Restoran Seriyasi</div><div class="frame-tag">8 ta · 1 oy</div></div></div></div>
+        <div class="swiper-slide"><div class="portfolio-card aspect-[9/16] rounded-xl"><img src="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=900&auto=format&fit=crop" alt="" class="absolute inset-0 w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent"></div><div class="absolute top-4 left-4"><span class="glass px-3 py-1 rounded-full frame-tag" style="color:var(--accent)">YouTube</span></div><div class="absolute bottom-6 left-6 right-6"><div class="font-display text-2xl mb-1">Podcast Video</div><div class="frame-tag">Multicam · seriya</div></div></div></div>
+      </div>
+      <div class="swiper-pagination mt-12 relative"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="py-28 lg:py-36 px-6 lg:px-12 relative section-glow-top">
+  <div class="orb orb-accent w-[500px] h-[500px] top-40 -left-60" style="opacity:.05"></div>
+  <div class="max-w-[1440px] mx-auto relative z-10">
+    <div class="mb-16 lg:mb-24" data-animate="fade-up">
+      <div class="flex items-center gap-3 mb-6"><span class="w-16 h-px" style="background:var(--accent)"></span><span class="frame-tag frame-tag-accent">02 / XIZMATLAR</span></div>
+      <h2 class="font-display" style="font-size:clamp(3rem,8vw,8rem);line-height:.9">Nima <span class="glow-text" style="color:var(--accent)">qilamiz</span></h2>
+    </div>
+    <div class="grid lg:grid-cols-4 gap-6 mb-12" data-animate="stagger">
+
+      <!-- Reels Production -->
+      <div class="service-card rounded-2xl p-8 glow-border">
+        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6" style="background:rgba(201,169,97,.1)">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>
+            <line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/>
+            <line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>
+          </svg>
         </div>
-    </section>
+        <h3 class="font-display text-3xl mb-3">Reels Production</h3>
+        <p class="leading-relaxed mb-6" style="color:var(--text-muted);font-weight:300;font-size:14px">Ssenariy, suratga olish, montaj, color grading. Brendingiz uchun scroll to'xtaydigan vertikal videolar.</p>
+        <div class="frame-tag" style="color:var(--accent)">FORMAT · 9:16</div>
+      </div>
 
-    <section class="py-24 px-6 md:px-12 lg:px-24 bg-[#0a0a0a]">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="p-8 border border-gray-800/50 bg-[#080808] hover:bg-[#0c0c0c] transition-colors fade-up">
-                <h3 class="text-2xl font-bold text-white mb-4">Strategik Yondashuv</h3>
-                <p class="text-gray-400">Bu shunchaki chiroyli kadrlar emas. Har bir video marketing maqsadlariga, psixologiyaga va e'tibor iqtisodiyotiga asoslanadi.</p>
-            </div>
-            <div class="p-8 border border-gray-800/50 bg-[#080808] hover:bg-[#0c0c0c] transition-colors fade-up" style="transition-delay: 0.1s;">
-                <h3 class="text-2xl font-bold text-white mb-4">Cinematic Sifat</h3>
-                <p class="text-gray-400">Bizning jamoa yuqori darajadagi prodyuserlik va kino sanoati standartlarini brendingizga olib kiradi. Sifat – ishonch demakdir.</p>
-            </div>
-            <div class="p-8 border border-gray-800/50 bg-[#080808] hover:bg-[#0c0c0c] transition-colors fade-up" style="transition-delay: 0.2s;">
-                <h3 class="text-2xl font-bold text-white mb-4">E'tibor Markazida</h3>
-                <p class="text-gray-400">Zamonaviy dunyoda eng qimmat valyuta bu – e'tibor. Biz odamlar oxirigacha ko'radigan kontent quramiz.</p>
-            </div>
+      <!-- YouTube Kontent -->
+      <div class="service-card rounded-2xl p-8 glow-border">
+        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6" style="background:rgba(201,169,97,.1)">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
         </div>
-    </section>
+        <h3 class="font-display text-3xl mb-3">YouTube Kontent</h3>
+        <p class="leading-relaxed mb-6" style="color:var(--text-muted);font-weight:300;font-size:14px">Long-form videolar: intervyu, vlog, hujjatli, podkast. Multicam, professional montaj.</p>
+        <div class="frame-tag" style="color:var(--accent)">FORMAT · 16:9</div>
+      </div>
 
-    <section id="portfolio" class="py-32 overflow-hidden fade-up">
-        <div class="px-6 md:px-12 lg:px-24 mb-12 flex flex-col md:flex-row justify-between items-end gap-6">
-            <h2 class="text-4xl md:text-6xl font-bold tracking-tighter text-white">Tanlangan <br/> Ishlarimiz.</h2>
-            <p class="text-gray-400 max-w-sm text-right">Biz yaratgan vizual hikoyalar va kreativ yechimlar bilan tanishing.</p>
+      <!-- Kontent Plan -->
+      <div class="service-card rounded-2xl p-8 glow-border">
+        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6" style="background:rgba(201,169,97,.1)">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
         </div>
+        <h3 class="font-display text-3xl mb-3">Kontent Plan</h3>
+        <p class="leading-relaxed mb-6" style="color:var(--text-muted);font-weight:300;font-size:14px">Oylik kontent strategiyasi, g'oyalar, trend tahlili, auditoriya segmentatsiyasi.</p>
+        <div class="frame-tag" style="color:var(--accent)">STRATEGY</div>
+      </div>
 
-        <div class="flex overflow-x-auto gap-6 px-6 md:px-12 lg:px-24 pb-12 snap-x snap-mandatory hide-scrollbar">
-            <div class="snap-center shrink-0 w-[85vw] md:w-[600px] aspect-video relative group bg-[#0a0a0a] border border-gray-800 flex items-center justify-center overflow-hidden cursor-pointer hover:border-gray-500 transition-colors">
-                <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center z-20 group-hover:scale-110 group-hover:bg-white transition-all duration-300">
-                    <i data-lucide="play" class="w-6 h-6 text-white group-hover:text-black ml-1"></i>
-                </div>
-                <div class="absolute bottom-6 left-6 z-20">
-                    <span class="px-3 py-1 bg-white/10 backdrop-blur-md border border-white/10 text-white text-xs uppercase tracking-wider mb-3 inline-block">Commercial</span>
-                    <h4 class="text-2xl font-bold text-white group-hover:translate-x-2 transition-transform duration-300">Brand Identity Film</h4>
-                </div>
-            </div>
-
-            <div class="snap-center shrink-0 w-[85vw] md:w-[600px] aspect-video relative group bg-[#0a0a0a] border border-gray-800 flex items-center justify-center overflow-hidden cursor-pointer hover:border-gray-500 transition-colors">
-                <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center z-20 group-hover:scale-110 group-hover:bg-white transition-all duration-300">
-                    <i data-lucide="play" class="w-6 h-6 text-white group-hover:text-black ml-1"></i>
-                </div>
-                <div class="absolute bottom-6 left-6 z-20">
-                    <span class="px-3 py-1 bg-white/10 backdrop-blur-md border border-white/10 text-white text-xs uppercase tracking-wider mb-3 inline-block">Reels</span>
-                    <h4 class="text-2xl font-bold text-white group-hover:translate-x-2 transition-transform duration-300">Dynamic Product Showcase</h4>
-                </div>
-            </div>
-            
-            <div class="snap-center shrink-0 w-[85vw] md:w-[600px] aspect-video relative group bg-[#0a0a0a] border border-gray-800 flex items-center justify-center overflow-hidden cursor-pointer hover:border-gray-500 transition-colors">
-                <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center z-20 group-hover:scale-110 group-hover:bg-white transition-all duration-300">
-                    <i data-lucide="play" class="w-6 h-6 text-white group-hover:text-black ml-1"></i>
-                </div>
-                <div class="absolute bottom-6 left-6 z-20">
-                    <span class="px-3 py-1 bg-white/10 backdrop-blur-md border border-white/10 text-white text-xs uppercase tracking-wider mb-3 inline-block">Interview</span>
-                    <h4 class="text-2xl font-bold text-white group-hover:translate-x-2 transition-transform duration-300">Founder's Story</h4>
-                </div>
-            </div>
+      <!-- Targeting -->
+      <div class="service-card rounded-2xl p-8 glow-border">
+        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6" style="background:rgba(201,169,97,.1)">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+            <line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/>
+            <line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/>
+          </svg>
         </div>
-    </section>
+        <h3 class="font-display text-3xl mb-3">Targeting</h3>
+        <p class="leading-relaxed mb-6" style="color:var(--text-muted);font-weight:300;font-size:14px">Instagram va Facebook reklamalari — to'g'ri auditoriyaga, to'g'ri vaqtda, to'g'ri xabar bilan.</p>
+        <div class="frame-tag" style="color:var(--accent)">META ADS</div>
+      </div>
+    </div>
 
-    <section class="py-24 px-6 md:px-12 lg:px-24 bg-[#080808]">
-        <div class="mb-16 fade-up">
-            <h2 class="text-4xl md:text-5xl font-bold tracking-tighter text-white">Bizning xizmatlar.</h2>
-            <div class="w-full h-[1px] bg-gray-800 mt-8"></div>
+    <!-- CTA button for services -->
+    <div class="flex justify-center" data-animate="fade-up">
+      <button onclick="openModal()" class="btn-primary px-12 py-5 text-sm uppercase tracking-[.2em] rounded-xl">
+        Xizmat buyurtma berish →
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="py-28 lg:py-36 px-6 lg:px-12 relative section-glow-top">
+  <div class="orb orb-accent w-[600px] h-[600px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" style="opacity:.03"></div>
+  <div class="max-w-[1440px] mx-auto relative z-10">
+    <div class="mb-16 lg:mb-24 flex items-end justify-between flex-wrap gap-8" data-animate="fade-up">
+      <div>
+        <div class="flex items-center gap-3 mb-6"><span class="w-16 h-px" style="background:var(--accent)"></span><span class="frame-tag frame-tag-accent">03 / TARIFLAR</span></div>
+        <h2 class="font-display" style="font-size:clamp(3rem,8vw,8rem);line-height:.9">Sizga <span class="glow-text" style="color:var(--accent)">mos</span></h2>
+      </div>
+      <p class="max-w-md" style="color:var(--text-muted);font-weight:300">Birinchi marta? START-UP dan boshlang — minimal byudjet, maksimal natija.</p>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-6 mb-8" data-animate="stagger">
+
+      <!-- START-UP -->
+      <div class="tariff-card rounded-2xl p-10 flex flex-col">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <div class="frame-tag mb-2">YANGI BOSHLOVCHILAR</div>
+            <h3 class="font-display text-4xl">START-UP</h3>
+          </div>
+          <span class="px-3 py-1 rounded-lg text-xs" style="background:rgba(255,255,255,.06);color:var(--text-muted)">Sodda format</span>
         </div>
+        <div class="mb-2"><span class="font-display text-6xl" style="color:var(--accent)">$599</span><span class="ml-2" style="color:var(--text-muted);font-size:14px">/ jami paket</span></div>
+        <p class="text-sm mb-8" style="color:var(--accent)">🎯 Bir videoning tannarxi atigi $59</p>
+        <div class="border-t mb-6" style="border-color:var(--line)"></div>
+        <ul class="space-y-4 mb-10 flex-1" style="font-size:14px;color:var(--text-muted)">
+          <li class="flex items-start gap-3"><span class="mt-1 w-4 h-4 rounded-full flex items-center justify-center shrink-0" style="background:rgba(201,169,97,.2)"><span style="width:6px;height:6px;background:var(--accent);border-radius:50%;display:block"></span></span><span><strong style="color:var(--text)">8 ta Reels + 2 ta BONUS</strong> (Jami: 10 ta)</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 w-4 h-4 rounded-full flex items-center justify-center shrink-0" style="background:rgba(201,169,97,.2)"><span style="width:6px;height:6px;background:var(--accent);border-radius:50%;display:block"></span></span><span>Kontent-plan & Professional ssenariylar</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 w-4 h-4 rounded-full flex items-center justify-center shrink-0" style="background:rgba(201,169,97,.2)"><span style="width:6px;height:6px;background:var(--accent);border-radius:50%;display:block"></span></span><span>Sifatli montaj va vizualizatsiya</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 w-4 h-4 rounded-full flex items-center justify-center shrink-0" style="background:rgba(201,169,97,.2)"><span style="width:6px;height:6px;background:var(--accent);border-radius:50%;display:block"></span></span><span>Tasvirga olish (lokatsiya va g'oya)</span></li>
+        </ul>
+        <button onclick="openModal('START-UP — $599 (10 ta Reels)')" class="btn-ghost w-full py-3.5 text-xs uppercase tracking-wider text-center rounded-xl">Buyurtma berish</button>
+      </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-16 gap-x-12">
-            <div class="group fade-up">
-                <i data-lucide="video" class="w-10 h-10 text-gray-500 mb-6 group-hover:text-white transition-colors duration-300"></i>
-                <h3 class="text-2xl font-bold text-white mb-3">Creative Reels Production</h3>
-                <p class="text-gray-400 leading-relaxed">Algoritmlarga moslashgan, e'tiborni ushlab turuvchi qisqa metrajli, yuqori sifatli videolar.</p>
-            </div>
-            <div class="group fade-up" style="transition-delay: 0.1s;">
-                <i data-lucide="monitor-play" class="w-10 h-10 text-gray-500 mb-6 group-hover:text-white transition-colors duration-300"></i>
-                <h3 class="text-2xl font-bold text-white mb-3">YouTube Content</h3>
-                <p class="text-gray-400 leading-relaxed">Kanal strategiyasidan tortib, syomka va montajgacha bo'lgan to'liq prodyuserlik.</p>
-            </div>
-            <div class="group fade-up" style="transition-delay: 0.2s;">
-                <i data-lucide="trending-up" class="w-10 h-10 text-gray-500 mb-6 group-hover:text-white transition-colors duration-300"></i>
-                <h3 class="text-2xl font-bold text-white mb-3">Content Strategy</h3>
-                <p class="text-gray-400 leading-relaxed">Brendingiz uchun oylik va yillik kontent rejalar, pozitsiyalash va auditoriya tahlili.</p>
-            </div>
+      <!-- BUSINESS GROWTH - Featured -->
+      <div class="tariff-card tariff-featured animated-border rounded-2xl p-10 flex flex-col relative">
+        <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-5 py-1.5 font-body text-xs font-semibold uppercase tracking-widest rounded-full z-10" style="background:linear-gradient(135deg,var(--accent),var(--accent-hot));color:var(--bg);white-space:nowrap">Eng Ommabop · 60% tanlov</div>
+        <div class="flex justify-between items-start mb-6 mt-4">
+          <div>
+            <div class="frame-tag mb-2" style="color:var(--accent)">BRENDNI MUSTAHKAMLASH</div>
+            <h3 class="font-display text-3xl">BUSINESS GROWTH</h3>
+          </div>
+          <span class="px-3 py-1 rounded-lg text-xs" style="background:rgba(201,169,97,.1);color:var(--accent)">Oltin o'rta</span>
         </div>
-    </section>
+        <div class="mb-2"><span class="font-display text-6xl glow-text" style="color:var(--accent)">$800</span><span class="ml-2" style="color:var(--text-muted);font-size:14px">/ jami paket</span></div>
+        <p class="text-sm mb-8" style="color:var(--accent)">🎯 Bir videoning tannarxi atigi $66</p>
+        <div class="border-t mb-6" style="border-color:var(--line)"></div>
+        <ul class="space-y-4 mb-10 flex-1" style="font-size:14px;color:var(--text-muted)">
+          <li class="flex items-start gap-3"><span class="mt-1 w-4 h-4 rounded-full flex items-center justify-center shrink-0" style="background:rgba(201,169,97,.2)"><span style="width:6px;height:6px;background:var(--accent);border-radius:50%;display:block"></span></span><span><strong style="color:var(--text)">10 ta Reels + 2 ta BONUS</strong> (Jami: 12 ta)</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 w-4 h-4 rounded-full flex items-center justify-center shrink-0" style="background:rgba(201,169,97,.2)"><span style="width:6px;height:6px;background:var(--accent);border-radius:50%;display:block"></span></span><span>Auditoriya tahlili & Trend g'oyalar</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 w-4 h-4 rounded-full flex items-center justify-center shrink-0" style="background:rgba(201,169,97,.2)"><span style="width:6px;height:6px;background:var(--accent);border-radius:50%;display:block"></span></span><span>Sotuvchi "Hook" va ssenariylar</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 w-4 h-4 rounded-full flex items-center justify-center shrink-0" style="background:rgba(201,169,97,.2)"><span style="width:6px;height:6px;background:var(--accent);border-radius:50%;display:block"></span></span><span>Dinamik montaj & Sound Design</span></li>
+        </ul>
+        <button onclick="openModal('BUSINESS GROWTH — $800 (12 ta Reels)')" class="btn-primary w-full py-3.5 text-xs uppercase tracking-wider text-center rounded-xl">Buyurtma berish</button>
+      </div>
 
-    <section class="py-32 px-6 md:px-12 lg:px-24">
-        <div class="text-center mb-20 fade-up">
-            <h2 class="text-4xl md:text-6xl font-bold tracking-tighter text-white mb-4">Sarmoya.</h2>
-            <p class="text-gray-400">Sizning biznesingizga mos keladigan premium yechimlar.</p>
+      <!-- VIP DOMINANT -->
+      <div class="tariff-card rounded-2xl p-10 flex flex-col">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <div class="frame-tag mb-2">TO'LIQ BOZORNI EGALLASH</div>
+            <h3 class="font-display text-4xl">VIP DOMINANT</h3>
+          </div>
+          <span class="px-3 py-1 rounded-lg text-xs" style="background:rgba(255,255,255,.06);color:var(--text-muted)">Maksimal</span>
         </div>
+        <div class="mb-2"><span class="font-display text-6xl" style="color:var(--accent)">$1000</span><span class="ml-2" style="color:var(--text-muted);font-size:14px">/ jami paket</span></div>
+        <p class="text-sm mb-8" style="color:var(--accent-hot)">🎁 SUPER BONUS: Professional Targeting tekin!</p>
+        <div class="border-t mb-6" style="border-color:var(--line)"></div>
+        <ul class="space-y-4 mb-10 flex-1" style="font-size:14px;color:var(--text-muted)">
+          <li class="flex items-start gap-3"><span class="mt-1 w-4 h-4 rounded-full flex items-center justify-center shrink-0" style="background:rgba(201,169,97,.2)"><span style="width:6px;height:6px;background:var(--accent);border-radius:50%;display:block"></span></span><span><strong style="color:var(--text)">12 ta Reels + 2 ta BONUS</strong> (Jami: 14 ta)</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 w-4 h-4 rounded-full flex items-center justify-center shrink-0" style="background:rgba(201,169,97,.2)"><span style="width:6px;height:6px;background:var(--accent);border-radius:50%;display:block"></span></span><span>Premium ssenariylar va Rejissura</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 w-4 h-4 rounded-full flex items-center justify-center shrink-0" style="background:rgba(201,169,97,.2)"><span style="width:6px;height:6px;background:var(--accent);border-radius:50%;display:block"></span></span><span>Professional rang korreksiyasi & sound</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 w-4 h-4 rounded-full flex items-center justify-center shrink-0" style="background:rgba(201,169,97,.15)"><span style="width:6px;height:6px;background:var(--accent-hot);border-radius:50%;display:block"></span></span><span style="color:var(--accent-hot);font-weight:500">Professional Targeting sozlash bepul!</span></li>
+        </ul>
+        <button onclick="openModal('VIP DOMINANT — $1000 (14 ta Reels + Targeting)')" class="btn-ghost w-full py-3.5 text-xs uppercase tracking-wider text-center rounded-xl">Buyurtma berish</button>
+      </div>
+    </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-            <div class="p-8 border border-gray-800 bg-[#0a0a0a] flex flex-col fade-up">
-                <h3 class="text-xl font-bold text-white mb-2">Test Package</h3>
-                <p class="text-sm text-gray-500 mb-8 pb-8 border-b border-gray-800">Hamkorlikni boshlash uchun mukammal tanlov.</p>
-                <ul class="space-y-4 mb-10 flex-grow">
-                    <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-gray-400 shrink-0"></i><span class="text-gray-300 text-sm">3 ta qisqa video (Reels)</span></li>
-                    <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-gray-400 shrink-0"></i><span class="text-gray-300 text-sm">Ssenariy yozish va dizayn</span></li>
-                </ul>
-                <button class="w-full py-4 border border-gray-700 text-white hover:bg-white hover:text-black transition-colors mt-auto">Tanlash</button>
+    <!-- YouTube Premium -->
+    <div class="glass-strong rounded-2xl p-8 lg:p-10" data-animate="fade-up">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="flex items-center gap-6">
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0" style="background:rgba(255,0,0,.1);border:1px solid rgba(255,0,0,.2)">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="#ff4444"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.27 8.27 0 004.84 1.55V6.79a4.85 4.85 0 01-1.07-.1z"/></svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-3 mb-1">
+              <h3 class="font-display text-3xl">YouTube Premium</h3>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold" style="background:rgba(255,0,0,.15);color:#ff6666;border:1px solid rgba(255,0,0,.2)">Aktiv</span>
             </div>
-
-            <div class="p-8 border border-white bg-white/5 relative flex flex-col transform md:-translate-y-4 shadow-[0_0_40px_rgba(255,255,255,0.05)] fade-up" style="transition-delay: 0.1s;">
-                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white text-black px-4 py-1 text-xs font-bold uppercase tracking-widest">
-                    Tavsiya etiladi
-                </div>
-                <h3 class="text-xl font-bold text-white mb-2 mt-2">Premium</h3>
-                <p class="text-sm text-gray-400 mb-8 pb-8 border-b border-gray-700">Yuqori darajadagi ta'sir va brend imidji.</p>
-                <ul class="space-y-4 mb-10 flex-grow">
-                    <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-white shrink-0"></i><span class="text-gray-200 text-sm">15 ta Reels / TikTok</span></li>
-                    <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-white shrink-0"></i><span class="text-gray-200 text-sm">Kino darajasidagi prodyuserlik</span></li>
-                    <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-white shrink-0"></i><span class="text-gray-200 text-sm">To'liq kontent arxitekturasi</span></li>
-                </ul>
-                <button class="w-full py-4 bg-white text-black font-bold hover:bg-gray-200 transition-colors mt-auto">Tanlash</button>
-            </div>
-
-            <div class="p-8 border border-gray-800 bg-[#0a0a0a] flex flex-col fade-up" style="transition-delay: 0.2s;">
-                <h3 class="text-xl font-bold text-white mb-2">Exclusive</h3>
-                <p class="text-sm text-gray-500 mb-8 pb-8 border-b border-gray-800">Yirik brendlar uchun to'liq yechim.</p>
-                <ul class="space-y-4 mb-10 flex-grow">
-                    <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-gray-400 shrink-0"></i><span class="text-gray-300 text-sm">Cheklanmagan kontent</span></li>
-                    <li class="flex items-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-gray-400 shrink-0"></i><span class="text-gray-300 text-sm">Maxsus ijodiy jamoa (in-house)</span></li>
-                </ul>
-                <button class="w-full py-4 border border-gray-700 text-white hover:bg-white hover:text-black transition-colors mt-auto">Muhokama qilish</button>
-            </div>
+            <p style="color:var(--text-muted);font-size:14px;font-weight:300">YouTube — sizning uzoq muddatli aktiv va brendingiz asosi. Turnkey formatda tizim yaratish.</p>
+          </div>
         </div>
-    </section>
-
-    <section id="contact" class="py-32 px-6 md:px-12 lg:px-24">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
-            <div class="fade-up">
-                <h2 class="text-5xl md:text-7xl font-bold tracking-tighter text-white mb-6">
-                    Eslab<br/> qolinadigan<br/> kontent<br/> yaratamiz.
-                </h2>
-                <p class="text-xl text-gray-400 mb-12">Sizning brendingiz yangi bosqichga chiqishga tayyormi? Formani to'ldiring va biz siz bilan bog'lanamiz.</p>
-            </div>
-
-            <div class="bg-[#0a0a0a] border border-gray-800 p-8 md:p-12 fade-up" style="transition-delay: 0.2s;">
-                <form class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-2">
-                            <label class="text-xs text-gray-500 uppercase tracking-wider">Ism</label>
-                            <input type="text" class="w-full bg-transparent border-b border-gray-800 pb-3 text-white focus:outline-none focus:border-white transition-colors" placeholder="Ismingizni kiriting" required>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-xs text-gray-500 uppercase tracking-wider">Telefon raqam</label>
-                            <input type="tel" class="w-full bg-transparent border-b border-gray-800 pb-3 text-white focus:outline-none focus:border-white transition-colors" placeholder="+998 90 123 45 67" required>
-                        </div>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-xs text-gray-500 uppercase tracking-wider">Maqsad</label>
-                        <textarea rows="4" class="w-full bg-transparent border-b border-gray-800 pb-3 text-white focus:outline-none focus:border-white transition-colors resize-none" placeholder="Qanday natijaga erishmoqchisiz?" required></textarea>
-                    </div>
-                    <button type="submit" class="w-full py-5 bg-white text-black font-bold uppercase tracking-wider hover:bg-gray-200 transition-colors flex items-center justify-center gap-3 mt-8">
-                        So'rov yuborish <i data-lucide="send" class="w-4 h-4"></i>
-                    </button>
-                </form>
-            </div>
+        <div class="text-center md:text-right shrink-0">
+          <p class="frame-tag mb-1">BOSHLANG'ICH NARX</p>
+          <p class="font-display text-4xl mb-4" style="color:var(--accent)">from $200</p>
+          <button onclick="openModal('YouTube Premium — from $200')" class="btn-primary px-8 py-3 text-xs uppercase tracking-wider rounded-xl" style="background:#cc0000">Konsultatsiya →</button>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <section class="py-24 px-6 md:px-12 lg:px-24 bg-[#080808]">
-        <div class="max-w-3xl mx-auto fade-up">
-            <h2 class="text-3xl md:text-5xl font-bold tracking-tighter text-white mb-16 text-center">Ko‘p beriladigan savollar.</h2>
-            
-            <div class="space-y-4" id="faq-container">
-                <div class="border-b border-gray-800 faq-item">
-                    <button class="w-full py-6 flex justify-between items-center text-left focus:outline-none group" onclick="toggleFaq(this)">
-                        <span class="text-lg md:text-xl font-medium text-white group-hover:text-gray-300 transition-colors">Ish jarayoni qanday kechadi?</span>
-                        <i data-lucide="chevron-down" class="w-5 h-5 text-gray-500 transition-transform duration-300"></i>
-                    </button>
-                    <div class="overflow-hidden max-h-0 transition-all duration-300 ease-in-out">
-                        <p class="pb-6 text-gray-400 leading-relaxed pr-8">Biz birinchi navbatda brifni o'rganamiz va maqsadlarni belgilaymiz. So'ngra strategiya va ssenariy tayyorlanadi. Tasdiqlangach, syomka jarayoni va montaj bosqichlari amalga oshiriladi.</p>
-                    </div>
-                </div>
+<!-- NUMBERS -->
+<section class="py-28 lg:py-36 px-6 lg:px-12 relative section-glow-top">
+  <div class="max-w-[1440px] mx-auto relative z-10">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-10" data-animate="stagger">
+      <div class="counter-glow"><div class="font-display glow-text mb-2" style="font-size:clamp(4rem,9vw,8rem);color:var(--accent);line-height:1">50+</div><div class="frame-tag">Loyihalar</div></div>
+      <div class="counter-glow"><div class="font-display glow-text mb-2" style="font-size:clamp(4rem,9vw,8rem);color:var(--accent);line-height:1">10M+</div><div class="frame-tag">Ko'rishlar</div></div>
+      <div class="counter-glow"><div class="font-display glow-text mb-2" style="font-size:clamp(4rem,9vw,8rem);color:var(--accent);line-height:1">25+</div><div class="frame-tag">Brendlar</div></div>
+      <div class="counter-glow"><div class="font-display glow-text mb-2" style="font-size:clamp(4rem,9vw,8rem);color:var(--accent);line-height:1">100%</div><div class="frame-tag">Sadoqat</div></div>
+    </div>
+  </div>
+</section>
 
-                <div class="border-b border-gray-800 faq-item">
-                    <button class="w-full py-6 flex justify-between items-center text-left focus:outline-none group" onclick="toggleFaq(this)">
-                        <span class="text-lg md:text-xl font-medium text-white group-hover:text-gray-300 transition-colors">Sizlar bilan oylik hamkorlik qilsa bo'ladimi?</span>
-                        <i data-lucide="chevron-down" class="w-5 h-5 text-gray-500 transition-transform duration-300"></i>
-                    </button>
-                    <div class="overflow-hidden max-h-0 transition-all duration-300 ease-in-out">
-                        <p class="pb-6 text-gray-400 leading-relaxed pr-8">Ha, albatta. Oylik hamkorlik bizning asosiy formatimiz bo'lib, u brendingizning uzluksiz o'sishini ta'minlaydi.</p>
-                    </div>
-                </div>
-            </div>
+<!-- CONTACT -->
+<section id="contact" class="py-28 lg:py-36 px-6 lg:px-12 relative section-glow-top">
+  <div class="orb orb-accent w-[600px] h-[600px] -bottom-40 -right-40" style="opacity:.04"></div>
+  <div class="max-w-[800px] mx-auto relative z-10">
+    <div class="mb-16 text-center" data-animate="fade-up">
+      <div class="flex items-center justify-center gap-3 mb-6"><span class="w-16 h-px" style="background:var(--accent)"></span><span class="frame-tag frame-tag-accent">04 / ALOQA</span><span class="w-16 h-px" style="background:var(--accent)"></span></div>
+      <h2 class="font-display mb-4" style="font-size:clamp(3rem,8vw,7rem);line-height:.9">Bog'laning</h2>
+      <p style="color:var(--text-muted);font-weight:300">24 soat ichida javob beramiz.</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6" data-animate="stagger">
+      <a href="https://t.me/Xazratov_Begzod" target="_blank" class="glass-strong rounded-2xl p-8 flex items-center justify-between group glow-border">
+        <div>
+          <div class="frame-tag mb-2">TELEGRAM</div>
+          <div class="font-display text-3xl">@Xazratov_Begzod</div>
+          <div class="mt-2" style="color:var(--text-muted);font-size:13px;font-weight:300">Tez javob kafolati</div>
         </div>
-    </section>
-
-    <footer class="pt-24 pb-8 px-6 md:px-12 lg:px-24 bg-[#050505] border-t border-gray-900">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-12 mb-24">
-            <div>
-                <h2 class="text-2xl font-bold text-white mb-2">AGENCY.</h2>
-                <p class="text-gray-500 font-light tracking-wide uppercase text-sm">Official Creative Team</p>
-            </div>
-            
-            <div class="flex flex-col sm:flex-row gap-8 md:gap-16">
-                <div class="flex flex-col gap-4">
-                    <span class="text-gray-600 uppercase text-xs tracking-widest font-bold">Aloqa</span>
-                    <a href="tel:+998901234567" class="text-white hover:text-gray-300 transition-colors text-lg">+998 90 123 45 67</a>
-                    <a href="mailto:hello@agency.uz" class="text-gray-400 hover:text-white transition-colors">hello@agency.uz</a>
-                </div>
-            </div>
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform" style="background:rgba(201,169,97,.1)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </div>
-    </footer>
+      </a>
+      <a href="tel:+998943541210" class="glass-strong rounded-2xl p-8 flex items-center justify-between group glow-border">
+        <div>
+          <div class="frame-tag mb-2">TELEFON</div>
+          <div class="font-display text-3xl">+998 94 354 12 10</div>
+          <div class="mt-2" style="color:var(--text-muted);font-size:13px;font-weight:300">Ish vaqti: 9:00 — 20:00</div>
+        </div>
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform" style="background:rgba(201,169,97,.1)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </a>
+    </div>
+    <div class="mt-10 text-center">
+      <button onclick="openModal()" class="btn-primary px-12 py-5 text-sm uppercase tracking-[.2em] rounded-xl">Buyurtma berish →</button>
+    </div>
+  </div>
+</section>
 
-    <script>
-        // Lucide ikonkalarni ishga tushirish
-        lucide.createIcons();
+<!-- FAQ -->
+<section class="py-28 lg:py-36 px-6 lg:px-12 relative section-glow-top">
+  <div class="max-w-[900px] mx-auto relative z-10" x-data="{open:-1}">
+    <div class="mb-16" data-animate="fade-up">
+      <div class="flex items-center gap-3 mb-6"><span class="w-16 h-px" style="background:var(--accent)"></span><span class="frame-tag frame-tag-accent">05 / FAQ</span></div>
+      <h2 class="font-display" style="font-size:clamp(3rem,8vw,7rem);line-height:.9">Tez-tez <span class="glow-text" style="color:var(--accent)">so'raladi</span></h2>
+    </div>
+    <div>
+      <template x-for="(item,i) in [
+        {q:'Qancha vaqtda videolar tayyor bo\'ladi?',a:'START-UP va BUSINESS GROWTH — 2-3 hafta. VIP DOMINANT — 3-4 hafta. YouTube uchun — alohida kelishiladi.'},
+        {q:'Bir oyda nechta video qila olasizlar?',a:'Oylik paketlar: 10, 12 yoki 14 ta Reels. YouTube uchun video hajmiga qarab turlicha.'},
+        {q:'Suratga olish qaerda bo\'ladi?',a:'Sizning lokatsiyangizda yoki studiyamizda — kelishuvga ko\'ra. Toshkent ichida borib olinadi.'},
+        {q:'Targeting VIP paketga kiradimi?',a:'Ha — VIP DOMINANT da Professional Targeting bepul. Boshqa paketlarda qo\'shimcha narxda qo\'shiladi.'},
+        {q:'To\'lov qanday amalga oshiriladi?',a:'50% oldindan, 50% videolarni topshirishda. Karta, naqd yoki bank o\'tkazmasi.'},
+        {q:'Ssenariyni kim yozadi?',a:'Ssenariy, pastanovka, g\'oya — barchasi bizning kreativ jamoa tomonidan. Siz faqat brendingiz haqida ma\'lumot berasiz.'}
+      ]" :key="i">
+        <div class="faq-item">
+          <button @click="open===i?open=-1:open=i" class="w-full py-7 flex items-center justify-between text-left gap-6 group">
+            <span class="font-display text-2xl group-hover:text-[var(--accent)] transition-colors" x-text="item.q"></span>
+            <span class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-all" :class="open===i?'rotate-45':''" style="color:var(--accent);border:1px solid rgba(201,169,97,.3);font-size:22px;font-family:'Oswald'">+</span>
+          </button>
+          <div x-show="open===i" x-collapse>
+            <p class="pb-7 pr-14 leading-relaxed" style="color:var(--text-muted);font-weight:300;font-size:15px" x-text="item.a"></p>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+</section>
 
-        // FAQ bosilganda ochilishi uchun sodda JavaScript
-        function toggleFaq(button) {
-            const content = button.nextElementSibling;
-            const icon = button.querySelector('i');
-            
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
-                icon.style.transform = 'rotate(0deg)';
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-                icon.style.transform = 'rotate(180deg)';
-            }
-        }
+<!-- FOOTER -->
+<footer class="pt-16 pb-8 px-6 lg:px-12 relative section-glow-top" style="background:var(--bg-soft)">
+  <div class="max-w-[1440px] mx-auto relative z-10">
+    <div class="grid lg:grid-cols-12 gap-10 mb-12">
+      <div class="lg:col-span-5">
+        <div class="font-body font-semibold text-sm tracking-[.25em] uppercase mb-6">TASMA<span style="color:var(--accent)">.</span>VS</div>
+        <p class="font-display mb-6" style="font-size:clamp(1.8rem,4vw,3rem);line-height:1.1">Rasmiy kreativ video production. <span style="color:var(--accent)">2026 —</span></p>
+        <button onclick="openModal()" class="btn-primary px-8 py-3.5 text-xs uppercase tracking-wider rounded-xl">Buyurtma berish</button>
+      </div>
+      <div class="lg:col-span-3">
+        <div class="frame-tag mb-4">SAYT</div>
+        <ul class="space-y-3" style="font-size:14px">
+          <li><a href="#portfolio" class="hover:text-[var(--accent)] transition-colors">Portfolio</a></li>
+          <li><a href="#services" class="hover:text-[var(--accent)] transition-colors">Xizmatlar</a></li>
+          <li><a href="#pricing" class="hover:text-[var(--accent)] transition-colors">Tariflar</a></li>
+          <li><a href="#contact" class="hover:text-[var(--accent)] transition-colors">Aloqa</a></li>
+        </ul>
+      </div>
+      <div class="lg:col-span-4">
+        <div class="frame-tag mb-4">IJTIMOIY</div>
+        <ul class="space-y-3" style="font-size:14px">
+          <li><a href="https://instagram.com/tasma.vs" target="_blank" class="hover:text-[var(--accent)] transition-colors">Instagram → @tasma.vs</a></li>
+          <li><a href="https://t.me/Xazratov_Begzod" target="_blank" class="hover:text-[var(--accent)] transition-colors">Telegram → @Xazratov_Begzod</a></li>
+          <li><a href="https://youtube.com/@tasmavs" target="_blank" class="hover:text-[var(--accent)] transition-colors">YouTube → @tasmavs</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-8 border-t flex flex-wrap justify-between items-center gap-4" style="border-color:var(--line);color:var(--text-dim);font-size:12px">
+      <div class="frame-tag">© 2026 Tasma.vs — Barcha huquqlar himoyalangan</div>
+      <div class="frame-tag">Made with film grain & coffee</div>
+    </div>
+  </div>
+</footer>
 
-        // Scroll qilinganda elementlar sekin paydo bo'lishi (Fade Up animatsiya)
-        document.addEventListener("DOMContentLoaded", () => {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.1 });
+<!-- SCRIPTS -->
+<script>
+// ===== MODAL =====
+function openModal(tariff=''){
+  const modal=document.getElementById('modal');
+  const select=document.getElementById('clientTariff');
+  if(tariff){for(let o of select.options){if(o.value===tariff||o.text===tariff){o.selected=true;break}}}
+  modal.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal()});
 
-            document.querySelectorAll('.fade-up').forEach((el) => {
-                observer.observe(el);
-            });
-        });
-    </script>
+function handleSubmit(e){
+  e.preventDefault();
+  const name=document.getElementById('clientName').value;
+  const phone=document.getElementById('clientPhone').value;
+  const tariff=document.getElementById('clientTariff').value;
+  const service=document.getElementById('clientService').value;
+  const msg=`Salom! Tasma.vs saytidan buyurtma:\n\n👤 Ism: ${name}\n📞 Telefon: ${phone}\n💼 Tarif: ${tariff}\n🎬 Xizmat: ${service}`;
+  window.open(`https://t.me/Xazratov_Begzod?text=${encodeURIComponent(msg)}`,'_blank');
+  closeModal();
+  document.getElementById('orderForm').reset();
+}
+
+// ===== THREE.JS — KAMERA VA PLYONKA =====
+(function(){
+  const canvas=document.getElementById('three-canvas');
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,1000);
+  camera.position.z=30;
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  renderer.setSize(innerWidth,innerHeight);
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0xffffff,.1));
+  const pl1=new THREE.PointLight(0xC9A961,2,80);pl1.position.set(15,10,20);scene.add(pl1);
+  const pl2=new THREE.PointLight(0xE55E2C,.8,60);pl2.position.set(-15,-10,15);scene.add(pl2);
+  const pl3=new THREE.PointLight(0x8888ff,.4,50);pl3.position.set(0,20,-10);scene.add(pl3);
+
+  // Materials
+  const matG=new THREE.MeshStandardMaterial({color:0xC9A961,metalness:.9,roughness:.2});
+  const matW=new THREE.MeshStandardMaterial({color:0xC9A961,metalness:.6,roughness:.5,wireframe:true,transparent:true,opacity:.35});
+  const matDark=new THREE.MeshStandardMaterial({color:0x1a1814,metalness:.8,roughness:.3});
+  const matGl=new THREE.MeshStandardMaterial({color:0xC9A961,metalness:.3,roughness:.1,transparent:true,opacity:.2});
+  const matH=new THREE.MeshStandardMaterial({color:0xE55E2C,metalness:.7,roughness:.3,transparent:true,opacity:.7});
+
+  const objs=[];
+
+  // === FILM REEL 1 ===
+  const reel1=new THREE.Group();
+  reel1.add(new THREE.Mesh(new THREE.TorusGeometry(3,.35,12,48),matG));
+  reel1.add(new THREE.Mesh(new THREE.TorusGeometry(1.2,.25,8,32),matG));
+  reel1.add(new THREE.Mesh(new THREE.CylinderGeometry(.4,.4,.3,16),matDark));
+  for(let i=0;i<6;i++){const s=new THREE.Mesh(new THREE.BoxGeometry(1.6,.12,.12),matW);s.rotation.z=(i/6)*Math.PI*2;reel1.add(s);}
+  reel1.position.set(-13,4,-5);reel1.userData={speed:.004,floatSpeed:.8,floatAmp:2,initY:4};scene.add(reel1);objs.push(reel1);
+
+  // === FILM REEL 2 (smaller, wireframe) ===
+  const reel2=new THREE.Group();
+  reel2.add(new THREE.Mesh(new THREE.TorusGeometry(2,.3,10,40),matW));
+  reel2.add(new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,.25,12),matDark));
+  for(let i=0;i<5;i++){const s=new THREE.Mesh(new THREE.BoxGeometry(1.2,.1,.1),matW);s.rotation.z=(i/5)*Math.PI*2;reel2.add(s);}
+  reel2.position.set(13,-3,-8);reel2.userData={speed:.005,floatSpeed:1.1,floatAmp:1.5,initY:-3};scene.add(reel2);objs.push(reel2);
+
+  // === CAMERA BODY ===
+  const cam=new THREE.Group();
+  // Body
+  const body=new THREE.Mesh(new THREE.BoxGeometry(4,2.8,2.2),matDark);cam.add(body);
+  // Lens barrel
+  const lens=new THREE.Mesh(new THREE.CylinderGeometry(1.1,1.3,1.8,24),matG);lens.rotation.z=Math.PI/2;lens.position.x=2.9;cam.add(lens);
+  // Lens front glass
+  const glass=new THREE.Mesh(new THREE.CircleGeometry(.8,24),matGl);glass.position.set(3.85,0,0);glass.rotation.y=Math.PI/2;cam.add(glass);
+  // Viewfinder bump
+  const vf=new THREE.Mesh(new THREE.BoxGeometry(1.2,.6,.8),matDark);vf.position.set(-.5,1.7,0);cam.add(vf);
+  // Hot shoe (top rail)
+  const shoe=new THREE.Mesh(new THREE.BoxGeometry(1,.15,.5),matG);shoe.position.set(0,1.57,0);cam.add(shoe);
+  // Record button
+  const btn=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.15,12),matH);btn.position.set(.8,1.57,.6);cam.add(btn);
+  cam.position.set(4,8,-12);cam.rotation.z=-.15;cam.rotation.y=-.3;
+  cam.userData={speed:.002,floatSpeed:.7,floatAmp:2,initY:8};scene.add(cam);objs.push(cam);
+
+  // === CLAPPERBOARD ===
+  const clap=new THREE.Group();
+  const clapBase=new THREE.Mesh(new THREE.BoxGeometry(3.5,2.5,.2),matDark);clap.add(clapBase);
+  // Stripes on top bar
+  const clapTop=new THREE.Mesh(new THREE.BoxGeometry(3.5,.7,.3),matG);clapTop.position.y=1.6;clap.add(clapTop);
+  // Black stripes
+  for(let i=0;i<4;i++){const stripe=new THREE.Mesh(new THREE.BoxGeometry(.35,.7,.35),matDark);stripe.position.set(-1.4+i*.8,1.6,0);clap.add(stripe);}
+  // Handle
+  const handle=new THREE.Mesh(new THREE.BoxGeometry(.25,1,.15),matG);handle.position.set(-1.5,.6,.1);clap.add(handle);
+  // Text lines on board
+  for(let i=0;i<3;i++){const line=new THREE.Mesh(new THREE.BoxGeometry(2.5,.08,.22),matW);line.position.set(.2,.5-i*.6,0);clap.add(line);}
+  clap.position.set(-6,-8,-8);clap.rotation.z=.2;clap.rotation.y=.3;
+  clap.userData={speed:.003,floatSpeed:.9,floatAmp:2.5,initY:-8};scene.add(clap);objs.push(clap);
+
+  // === FILM STRIP ===
+  const strip=new THREE.Group();
+  for(let i=0;i<6;i++){
+    const frame=new THREE.Mesh(new THREE.BoxGeometry(1.8,2.4,.06),matGl);frame.position.x=i*2.1-5.25;strip.add(frame);
+    // Sprocket holes top
+    const h1=new THREE.Mesh(new THREE.BoxGeometry(.35,.35,.1),matDark);h1.position.set(i*2.1-5.25,1.2,0);strip.add(h1);
+    const h2=new THREE.Mesh(new THREE.BoxGeometry(.35,.35,.1),matDark);h2.position.set(i*2.1-5.25,-1.2,0);strip.add(h2);
+    // Border
+    const border=new THREE.Mesh(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.8,2.4,.06)),new THREE.LineBasicMaterial({color:0xC9A961,transparent:true,opacity:.4}));border.position.x=i*2.1-5.25;strip.add(border);
+  }
+  strip.position.set(10,-10,-6);strip.rotation.z=.1;strip.rotation.y=-.3;
+  strip.userData={speed:.001,floatSpeed:.6,floatAmp:1.8,initY:-10};scene.add(strip);objs.push(strip);
+
+  // Small reel 3
+  const reel3=new THREE.Group();
+  reel3.add(new THREE.Mesh(new THREE.TorusGeometry(1.5,.2,8,32),matH));
+  reel3.add(new THREE.Mesh(new THREE.CylinderGeometry(.25,.25,.2,12),matDark));
+  for(let i=0;i<4;i++){const s=new THREE.Mesh(new THREE.BoxGeometry(.9,.08,.08),matW);s.rotation.z=(i/4)*Math.PI*2;reel3.add(s);}
+  reel3.position.set(-8,10,-14);reel3.userData={speed:.006,floatSpeed:1.2,floatAmp:3,initY:10};scene.add(reel3);objs.push(reel3);
+
+  // === PARTICLES ===
+  const pCount=500,pGeo=new THREE.BufferGeometry(),pPos=new Float32Array(pCount*3);
+  for(let i=0;i<pCount*3;i++)pPos[i]=(Math.random()-.5)*80;
+  pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
+  const particles=new THREE.Points(pGeo,new THREE.PointsMaterial({color:0xC9A961,size:.07,transparent:true,opacity:.4,sizeAttenuation:true}));
+  scene.add(particles);
+
+  // Mouse + scroll
+  let mx=0,my=0,scrollP=0;
+  document.addEventListener('mousemove',e=>{mx=(e.clientX/innerWidth-.5)*2;my=(e.clientY/innerHeight-.5)*2});
+  addEventListener('scroll',()=>{scrollP=Math.min(scrollY/(innerHeight*1.5),1)});
+  addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+
+  const clock=new THREE.Clock();
+  (function anim(){
+    requestAnimationFrame(anim);const t=clock.getElapsedTime();
+    camera.position.x+=(mx*3-camera.position.x)*.02;
+    camera.position.y+=(-my*2-camera.position.y)*.02;
+    camera.lookAt(0,0,0);
+    objs.forEach((o,i)=>{
+      const d=o.userData;
+      o.rotation.x+=d.speed;o.rotation.y+=d.speed*1.2;
+      o.position.y=d.initY+Math.sin(t*d.floatSpeed+i)*.8*d.floatAmp*.3;
+    });
+    particles.rotation.y+=.0002;particles.rotation.x+=.0001;
+    canvas.style.opacity=Math.max(1-scrollP*.7,.12);
+    renderer.render(scene,camera);
+  })();
+})();
+
+// ===== CURSOR =====
+(function(){
+  if(innerWidth<1024)return;
+  const dot=document.getElementById('cursorDot'),ring=document.getElementById('cursorRing');
+  let cx=0,cy=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{cx=e.clientX;cy=e.clientY});
+  (function upd(){rx+=(cx-rx)*.15;ry+=(cy-ry)*.15;dot.style.transform=`translate(${cx-4}px,${cy-4}px)`;ring.style.transform=`translate(${rx-20}px,${ry-20}px)`;requestAnimationFrame(upd)})();
+  document.querySelectorAll('a,button,.portfolio-card,.tariff-card,.service-card').forEach(el=>{el.addEventListener('mouseenter',()=>ring.classList.add('hover'));el.addEventListener('mouseleave',()=>ring.classList.remove('hover'))});
+})();
+
+// ===== GSAP =====
+document.addEventListener('DOMContentLoaded',()=>{
+  gsap.registerPlugin(ScrollTrigger);
+  document.querySelectorAll('[data-animate="fade-up"]').forEach(el=>{gsap.from(el,{y:60,opacity:0,duration:1.2,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 85%'}})});
+  document.querySelectorAll('[data-animate="stagger"]').forEach(el=>{gsap.from(el.children,{y:50,opacity:0,duration:1,ease:'power3.out',stagger:.12,scrollTrigger:{trigger:el,start:'top 85%'}})});
+  gsap.from('#heroSub',{y:30,opacity:0,duration:1,delay:.9,ease:'power3.out'});
+  gsap.from('#heroCTA',{y:30,opacity:0,duration:1,delay:1.1,ease:'power3.out'});
+  gsap.from('#heroMeta',{y:20,opacity:0,duration:1,delay:1.3,ease:'power3.out'});
+
+  new Swiper('.portfolio-swiper',{slidesPerView:1.15,spaceBetween:16,loop:true,speed:800,pagination:{el:'.swiper-pagination',clickable:true},breakpoints:{640:{slidesPerView:2.2,spaceBetween:20},1024:{slidesPerView:3.2,spaceBetween:24},1280:{slidesPerView:4,spaceBetween:24}}});
+});
+</script>
 </body>
 </html>
